@@ -18,6 +18,7 @@ public class Main{
         JDA api = JDABuilder.createDefault(token)
                 .setActivity(Activity.playing("TTT"))
                 .setStatus(OnlineStatus.IDLE)
+                .addEventListeners(new MessageListener())
                 .build();
     }
 }
