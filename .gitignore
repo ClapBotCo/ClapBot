@@ -14,3 +14,4 @@ build/classes/java/main/JoeCord/Seal/ClapBot/CommandHandler.class
 build/classes/java/main/JoeCord/Seal/ClapBot/Main.class
 build/classes/java/main/JoeCord/Seal/ClapBot/MessageListener.class
 *.bin
+.vscode/launch.json
