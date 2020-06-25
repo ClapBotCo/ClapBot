@@ -18,3 +18,4 @@ build/classes/java/main/JoeCord/Seal/ClapBot/MessageListener.class
 .vscode/
 .classpath
 .project
+.gitignore
