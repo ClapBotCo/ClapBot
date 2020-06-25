@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "env": {
+                "DISCORD_CLAPBOT_TOKEN" : "NzIzODkxNjA0MjQ2NjI2MzY5.XvRQsA.fXeZiR7RwzPd3Jrz2w1qdrPE4tY"}
+        },
+        {
+            "type": "java",
+            "name": "Debug Main",
+            "request": "launch",
+            "mainClass": "JoeCord.Seal.ClapBot.Main",
+            "projectName": "ClapBot",
+            "env": {
+                "DISCORD_CLAPBOT_TOKEN" : "NzIzODkxNjA0MjQ2NjI2MzY5.XvRQsA.fXeZiR7RwzPd3Jrz2w1qdrPE4tY"}
+        }
+    ]
+}

@@ -3,6 +3,7 @@ package JoeCord.Seal.ClapBot;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import java.util.regex.Pattern;
 
 import java.util.EventListener;
 
@@ -22,6 +23,14 @@ public class MessageListener extends ListenerAdapter
 
         Message message = event.getMessage();
         String content = message.getContentRaw();
+
+        //N - Detecting Cult
+        if(Pattern.matches("*cult*", content.toLowerCase()))
+        {
+            System.out.println("Command detected!");
+            new NotACult(event.getChannel(), event.getAuthor());
+        }
+        // End of N - Detecting cult
 
         String[] array = content.split(" ");
         try {
