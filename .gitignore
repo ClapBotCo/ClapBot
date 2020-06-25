@@ -18,3 +18,5 @@ build/classes/java/main/JoeCord/Seal/ClapBot/MessageListener.class
 .vscode/
 .classpath
 .project
+.settings/org.eclipse.buildship.core.prefs
+.gitignore
