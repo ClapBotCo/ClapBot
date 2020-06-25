@@ -25,7 +25,7 @@ public class MessageListener extends ListenerAdapter
 
         String[] array = content.split(" ");
         try {
-            if (array[0].charAt(0) == '!') {
+            if (array[0].equalsIgnoreCase("clap")) {
                 System.out.println("Command detected!");
                 new CommandHandler(event.getChannel(), array);
             }
