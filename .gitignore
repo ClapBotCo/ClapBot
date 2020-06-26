@@ -3,5 +3,4 @@ build/
 bin/
 .idea/
 .settings/
-.vscode/
-.project
+out/
