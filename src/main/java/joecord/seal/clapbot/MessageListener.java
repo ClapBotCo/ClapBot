@@ -1,4 +1,4 @@
-package JoeCord.Seal.ClapBot;
+package joecord.seal.clapbot;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
