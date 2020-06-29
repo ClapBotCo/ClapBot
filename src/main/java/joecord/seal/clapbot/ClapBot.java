@@ -2,6 +2,7 @@ package joecord.seal.clapbot;
 
 import joecord.seal.clapbot.commands.CommandHandler;
 import joecord.seal.clapbot.commands.EchoCommand;
+import joecord.seal.clapbot.commands.GnEmanCommand;
 import joecord.seal.clapbot.commands.NotACultCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,6 +31,7 @@ public class ClapBot {
         this.commandHandler = new CommandHandler("clap ");
         this.commandHandler.registerCommand(new EchoCommand());
         this.commandHandler.registerCommand(new NotACultCommand());
+        this.commandHandler.registerCommand(new GnEmanCommand());
         try {
             this.api = buildAPI();
         } catch (LoginException e) {
