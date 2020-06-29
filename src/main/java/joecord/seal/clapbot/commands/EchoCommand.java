@@ -14,7 +14,7 @@ public class EchoCommand implements CommandExecutor {
 
     @Override
     public String getCommand() {
-        return "echo";
+        return ".*echo.*";
     }
 
     @Override
