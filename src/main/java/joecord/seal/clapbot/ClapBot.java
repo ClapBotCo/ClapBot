@@ -4,6 +4,7 @@ import joecord.seal.clapbot.commands.CommandHandler;
 import joecord.seal.clapbot.commands.EchoCommand;
 import joecord.seal.clapbot.commands.GnEmanCommand;
 import joecord.seal.clapbot.commands.NotACultCommand;
+import joecord.seal.clapbot.commands.BanShadow;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -28,10 +29,11 @@ public class ClapBot {
         this.token = token;
         System.out.println(token);
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
-        this.commandHandler = new CommandHandler("clap ");
+        this.commandHandler = new CommandHandler("<:joeclap:551531713487175682> ");
         this.commandHandler.registerCommand(new EchoCommand());
         this.commandHandler.registerCommand(new NotACultCommand());
         this.commandHandler.registerCommand(new GnEmanCommand());
+        this.commandHandler.registerCommand(new BanShadow());
         try {
             this.api = buildAPI();
         } catch (LoginException e) {
