@@ -4,9 +4,6 @@ import joecord.seal.clapbot.commands.CommandHandler;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import java.util.regex.Pattern;
-
-import java.util.EventListener;
 
 public class MessageListener extends ListenerAdapter
 {
@@ -26,7 +23,11 @@ public class MessageListener extends ListenerAdapter
 
         Message message = event.getMessage();
         try {
-            this.commandHandler.handleCommand(event.getChannel(), event.getAuthor(), event.getMember(), message);
+            this.commandHandler.handleCommand(
+                event.getChannel(),
+                event.getAuthor(),
+                event.getMember(),
+                message);
         }
         catch (Exception exception) {
             System.out.println("Picture or empty message detected!");
