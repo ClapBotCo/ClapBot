@@ -14,7 +14,7 @@ public class NotACultCommand implements CommandExecutor {
 
     @Override
     public String getCommand() {
-        return "cult";
+        return ".*cult.*";
     }
 
     @Override
