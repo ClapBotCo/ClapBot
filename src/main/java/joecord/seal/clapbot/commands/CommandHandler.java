@@ -36,19 +36,43 @@ public class CommandHandler {
         return true;
     }
 
-    public void handleCommand(MessageChannel channel, User user, Member member, Message message){
+    public void handleCommand(MessageChannel channel, User user, Member member,
+        Message message) {
+
         String content = message.getContentRaw();
         String[] parts = content.split(" ");
+
+        // Handle regex commands
         if(!content.startsWith(prefix)){
-            Optional<CommandExecutor> commandExecutor = registeredCommands.values().stream().filter(CommandExecutor::isRegexCommand).filter((executor -> Pattern.matches(executor.getCommand(), content))).findFirst();
-            commandExecutor.ifPresent(executor ->   executor.execute(channel, user, member, parts));
+            Optional<CommandExecutor> commandExecutor = 
+                registeredCommands.values().stream()
+                .filter(CommandExecutor::isRegexCommand)
+                .filter((executor -> Pattern.matches(
+                    executor.getCommand(), content)))
+                .findFirst();
+            commandExecutor.ifPresent(
+                executor -> executor.execute(channel, user, member, parts));
             return;
         }
-        String commandName = parts[0].substring(1);
-        if(registeredCommands.containsKey(commandName)){
-            CommandExecutor commandExecutor = registeredCommands.get(commandName);
+
+        // Handle non-regex commands
+        String[] temp = content.substring(prefix.length()).split(" ");
+        String commandName = temp[0];
+        String[] args = new String[] {};
+
+        if(registeredCommands.containsKey(commandName)) {
+
+            // Get arguments if there is any
+            if(temp.length > 1) {
+                args = Arrays.copyOfRange(temp, 1, temp.length);
+            }
+
+            // Get the command executor
+            CommandExecutor commandExecutor =
+                registeredCommands.get(commandName);
+            
+            // If it's a normal command, execute it
             if(!commandExecutor.isRegexCommand()) {
-                String[] args = Arrays.copyOfRange(parts, 1, parts.length);
                 commandExecutor.execute(channel, user, member, args);
             }
         }
