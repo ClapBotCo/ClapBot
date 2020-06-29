@@ -2,14 +2,15 @@ package joecord.seal.clapbot;
 
 import joecord.seal.clapbot.commands.CommandHandler;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-public class MessageListener extends ListenerAdapter
+public class Listener extends ListenerAdapter
 {
     private CommandHandler commandHandler;
 
-    public MessageListener(CommandHandler commandHandler) {
+    public Listener(CommandHandler commandHandler) {
         this.commandHandler = commandHandler;
     }
 
@@ -33,5 +34,11 @@ public class MessageListener extends ListenerAdapter
             System.out.println("Picture or empty message detected!");
             exception.printStackTrace();
         }
+    }
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        System.out.println(event.getUser().getName() + " has just joined " +
+            event.getGuild().getName());
     }
 }
