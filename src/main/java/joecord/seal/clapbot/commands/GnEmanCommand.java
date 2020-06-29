@@ -22,7 +22,7 @@ public class GnEmanCommand implements CommandExecutor {
 
     @Override
     public String getCommand() {
-        return "^gn modmail$";
+        return ".*gn modmail.*";
     }
 
     @Override
