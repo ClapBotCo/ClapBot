@@ -29,7 +29,7 @@ public class ClapBot {
         this.token = token;
         System.out.println(token);
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
-        this.commandHandler = new CommandHandler("<:joeclap:551531713487175682> ");
+        this.commandHandler = new CommandHandler("clap ");
 
         // Register commands
         this.commandHandler.registerCommand(new EchoCommand());
