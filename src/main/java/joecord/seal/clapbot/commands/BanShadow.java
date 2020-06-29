@@ -8,7 +8,8 @@ import net.dv8tion.jda.api.entities.User;
 public class BanShadow implements CommandExecutor {
 
     @Override
-    public void execute(MessageChannel channel, User senderUser, Member senderMember, String[] arguments) {
+    public void execute(MessageChannel channel, User senderUser,
+        Member senderMember, String[] arguments) {
         double num = Math.random();
         String msg = ((num < 0.5) ? "#ModShadow" : "#BanShadow");
         channel.sendMessage(msg).queue();
