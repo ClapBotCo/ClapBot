@@ -42,26 +42,32 @@ public class CommandHandler {
         String content = message.getContentRaw();
         String[] rawParts = content.split(" ");
             // Parts of the message including the prefix
-        String[] parts = content.substring(prefix.length()).split(" ");
-            // Parts of the message with the prefix removed
 
-        if(!content.startsWith(prefix)) {
-            // Handle regex commands
+        if(!content.startsWith(prefix)) { // Handle regex commands
+
             Optional<CommandExecutor> commandExecutor = 
                 registeredCommands.values().stream()
                 .filter(CommandExecutor::isRegexCommand)
                 .filter((executor -> Pattern.matches(
                     executor.getCommand(), content)))
                 .findFirst();
+
+            if(commandExecutor.isPresent()) System.out.println(
+                "Recognised command " + commandExecutor.get().getCommand());
+
             commandExecutor.ifPresent(
                 executor -> executor.execute(channel, user, member, rawParts));
         }
-        else {
-            // Handle non-regex commands
+        else { // Handle non-regex commands
+
+            String[] parts = content.substring(prefix.length()).split(" ");
+                // Parts of the message with the prefix removed
             String commandName = parts[0];
             String[] args = new String[] {};
 
             if(registeredCommands.containsKey(commandName)) {
+
+                System.out.println("Recognised command " + commandName);
 
                 // Get arguments if there is any
                 if(parts.length > 1) {
