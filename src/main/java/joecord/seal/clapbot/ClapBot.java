@@ -53,7 +53,7 @@ public class ClapBot {
         return JDABuilder.createDefault(this.token)
                 .setActivity(Activity.playing("TTT"))
                 .setStatus(OnlineStatus.IDLE)
-                .addEventListeners(new MessageListener(this.commandHandler))
+                .addEventListeners(new Listener(this.commandHandler))
                 .build();
     }
 
