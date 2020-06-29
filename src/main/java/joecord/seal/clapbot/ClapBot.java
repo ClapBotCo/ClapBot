@@ -26,7 +26,8 @@ public class ClapBot {
         instance = this;
         this.token = token;
         System.out.println(token);
-        this.commandHandler = new CommandHandler("clap ");
+        //JoeCord :joeclap: is currently prefix
+        this.commandHandler = new CommandHandler("<:joeclap:551531713487175682> ");
         this.commandHandler.registerCommand(new EchoCommand());
         this.commandHandler.registerCommand(new NotACultCommand());
         try {
