@@ -31,7 +31,7 @@ public class MessageListener extends ListenerAdapter
         }
         catch (Exception exception) {
             System.out.println("Picture or empty message detected!");
-            System.out.println(exception);
+            exception.printStackTrace();
         }
     }
 }
