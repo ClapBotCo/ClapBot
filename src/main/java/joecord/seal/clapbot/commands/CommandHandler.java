@@ -49,7 +49,7 @@ public class CommandHandler {
                 registeredCommands.values().stream()
                 .filter(CommandExecutor::isRegexCommand)
                 .filter((executor -> Pattern.matches(
-                    executor.getCommand(), content)))
+                    executor.getCommand(), content.toLowerCase())))
                 .findFirst();
 
             if(commandExecutor.isPresent()) System.out.println(
