@@ -40,10 +40,13 @@ public class CommandHandler {
         Message message) {
 
         String content = message.getContentRaw();
-        String[] parts = content.split(" ");
+        String[] rawParts = content.split(" ");
+            // Parts of the message including the prefix
+        String[] parts = content.substring(prefix.length()).split(" ");
+            // Parts of the message with the prefix removed
 
-        // Handle regex commands
-        if(!content.startsWith(prefix)){
+        if(!content.startsWith(prefix)) {
+            // Handle regex commands
             Optional<CommandExecutor> commandExecutor = 
                 registeredCommands.values().stream()
                 .filter(CommandExecutor::isRegexCommand)
@@ -51,29 +54,28 @@ public class CommandHandler {
                     executor.getCommand(), content)))
                 .findFirst();
             commandExecutor.ifPresent(
-                executor -> executor.execute(channel, user, member, parts));
-            return;
+                executor -> executor.execute(channel, user, member, rawParts));
         }
+        else {
+            // Handle non-regex commands
+            String commandName = parts[0];
+            String[] args = new String[] {};
 
-        // Handle non-regex commands
-        String[] temp = content.substring(prefix.length()).split(" ");
-        String commandName = temp[0];
-        String[] args = new String[] {};
+            if(registeredCommands.containsKey(commandName)) {
 
-        if(registeredCommands.containsKey(commandName)) {
+                // Get arguments if there is any
+                if(parts.length > 1) {
+                    args = Arrays.copyOfRange(parts, 1, parts.length);
+                }
 
-            // Get arguments if there is any
-            if(temp.length > 1) {
-                args = Arrays.copyOfRange(temp, 1, temp.length);
-            }
-
-            // Get the command executor
-            CommandExecutor commandExecutor =
-                registeredCommands.get(commandName);
-            
-            // If it's a normal command, execute it
-            if(!commandExecutor.isRegexCommand()) {
-                commandExecutor.execute(channel, user, member, args);
+                // Get the command executor
+                CommandExecutor commandExecutor =
+                    registeredCommands.get(commandName);
+                
+                // If it's a normal command, execute it
+                if(!commandExecutor.isRegexCommand()) {
+                    commandExecutor.execute(channel, user, member, args);
+                }
             }
         }
     }
