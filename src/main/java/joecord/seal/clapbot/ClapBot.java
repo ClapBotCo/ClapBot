@@ -26,7 +26,7 @@ public class ClapBot {
         instance = this;
         this.token = token;
         System.out.println(token);
-        this.commandHandler = new CommandHandler("!");
+        this.commandHandler = new CommandHandler("clap ");
         this.commandHandler.registerCommand(new EchoCommand());
         this.commandHandler.registerCommand(new NotACultCommand());
         try {
