@@ -32,7 +32,7 @@ public interface CommandExecutor {
 
     /**
      * Get the usage for the command
-     * E.G      <argument1> <argument2>
+     * E.G {@code <argument1> <argument2>}
      * @return  The usage for the command
      */
     String getUsage();
