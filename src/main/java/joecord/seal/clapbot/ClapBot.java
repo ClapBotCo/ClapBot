@@ -30,6 +30,8 @@ public class ClapBot {
         System.out.println(token);
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
         this.commandHandler = new CommandHandler("<:joeclap:551531713487175682> ");
+
+        // Register commands
         this.commandHandler.registerCommand(new EchoCommand());
         this.commandHandler.registerCommand(new NotACultCommand());
         this.commandHandler.registerCommand(new GnEmanCommand());
