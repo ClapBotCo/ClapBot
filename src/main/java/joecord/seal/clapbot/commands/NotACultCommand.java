@@ -8,8 +8,10 @@ import net.dv8tion.jda.api.entities.User;
 public class NotACultCommand implements CommandExecutor {
 
     @Override
-    public void execute(MessageChannel channel, User senderUser, Member senderMember, String[] arguments) {
-        channel.sendMessage(":joeL: " + senderMember.getEffectiveName() + " has said a forbidden word").queue();
+    public void execute(MessageChannel channel, User senderUser,
+        Member senderMember, String[] arguments) {
+        channel.sendMessage(":joeL: " + senderMember.getEffectiveName() + 
+            " has said a forbidden word").queue();
     }
 
     @Override
