@@ -1,10 +1,8 @@
 package joecord.seal.clapbot;
 
-import joecord.seal.clapbot.commands.CommandHandler;
-import joecord.seal.clapbot.commands.EchoCommand;
-import joecord.seal.clapbot.commands.GnEmanCommand;
-import joecord.seal.clapbot.commands.NotACultCommand;
-import joecord.seal.clapbot.commands.BanShadow;
+import joecord.seal.clapbot.commands.CommandDescriptor;
+import joecord.seal.clapbot.commands.conditional_commands.*;
+import joecord.seal.clapbot.commands.message_commands.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -32,10 +30,15 @@ public class ClapBot {
         this.commandHandler = new CommandHandler("clap ");
 
         // Register commands
-        this.commandHandler.registerCommand(new EchoCommand());
-        this.commandHandler.registerCommand(new NotACultCommand());
-        this.commandHandler.registerCommand(new GnEmanCommand());
-        this.commandHandler.registerCommand(new BanShadow());
+        this.commandHandler.registerMessageCommand(
+            new CommandDescriptor<EchoCommand>(EchoCommand.class));
+        this.commandHandler.registerConditonalCommand(
+            new CommandDescriptor<BanShadow>(BanShadow.class));
+        this.commandHandler.registerConditonalCommand(
+            new CommandDescriptor<GnEmanCommand>(GnEmanCommand.class));
+        this.commandHandler.registerConditonalCommand(
+            new CommandDescriptor<NotACultCommand>(NotACultCommand.class));
+    
         try {
             this.api = buildAPI();
         } catch (LoginException e) {
@@ -53,7 +56,7 @@ public class ClapBot {
         return JDABuilder.createDefault(this.token)
                 .setActivity(Activity.playing("TTT"))
                 .setStatus(OnlineStatus.IDLE)
-                .addEventListeners(new Listener(this.commandHandler))
+                .addEventListeners(this.commandHandler)
                 .build();
     }
 
