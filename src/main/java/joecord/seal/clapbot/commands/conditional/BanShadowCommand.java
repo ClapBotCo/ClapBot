@@ -2,12 +2,11 @@ package joecord.seal.clapbot.commands.conditional;
 
 import java.util.regex.Pattern;
 
-import joecord.seal.clapbot.commands.ConditionalCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class BanShadow extends ConditionalCommand {
+public class BanShadowCommand extends ConditionalCommand {
 
-    public BanShadow() {
+    public BanShadowCommand() {
         super(
             "Ban Shadow",
             "Responds to 'shadow' with either '#ModShadow' or '#BanShadow'"

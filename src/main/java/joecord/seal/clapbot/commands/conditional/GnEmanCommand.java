@@ -2,7 +2,6 @@ package joecord.seal.clapbot.commands.conditional;
 
 import java.util.regex.Pattern;
 
-import joecord.seal.clapbot.commands.ConditionalCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class GnEmanCommand extends ConditionalCommand {

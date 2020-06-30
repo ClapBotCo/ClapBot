@@ -1,5 +1,6 @@
-package joecord.seal.clapbot.commands;
+package joecord.seal.clapbot.commands.message;
 
+import joecord.seal.clapbot.commands.GenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public abstract class MessageCommand implements 
