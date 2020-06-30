@@ -1,0 +1,21 @@
+package joecord.seal.clapbot.commands.message;
+
+import joecord.seal.clapbot.commands.MessageCommand;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+
+public class EchoCommand extends MessageCommand {
+
+    public EchoCommand() {
+        super(
+            "echo", // Name
+            "Responds with the message provided to it", // Description
+            "echo <message to echo>", // Usage
+            new String[] {"say"} // Aliases
+        );
+    }
+
+    @Override
+    public void execute(MessageReceivedEvent event, String[] arguments) {
+        event.getChannel().sendMessage(String.join(" ", arguments)).queue();
+    }
+}

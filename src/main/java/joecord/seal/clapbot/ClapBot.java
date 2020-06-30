@@ -1,8 +1,7 @@
 package joecord.seal.clapbot;
 
-import joecord.seal.clapbot.commands.CommandDescriptor;
-import joecord.seal.clapbot.commands.conditional_commands.*;
-import joecord.seal.clapbot.commands.message_commands.*;
+import joecord.seal.clapbot.commands.conditional.*;
+import joecord.seal.clapbot.commands.message.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -30,14 +29,10 @@ public class ClapBot {
         this.commandHandler = new CommandHandler("clap ");
 
         // Register commands
-        this.commandHandler.registerMessageCommand(
-            new CommandDescriptor<EchoCommand>(EchoCommand.class));
-        this.commandHandler.registerConditonalCommand(
-            new CommandDescriptor<BanShadow>(BanShadow.class));
-        this.commandHandler.registerConditonalCommand(
-            new CommandDescriptor<GnEmanCommand>(GnEmanCommand.class));
-        this.commandHandler.registerConditonalCommand(
-            new CommandDescriptor<NotACultCommand>(NotACultCommand.class));
+        this.commandHandler.register(new EchoCommand());
+        this.commandHandler.register(new BanShadow());
+        this.commandHandler.register(new GnEmanCommand());
+        this.commandHandler.register(new NotACultCommand());
     
         try {
             this.api = buildAPI();

@@ -7,28 +7,39 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import joecord.seal.clapbot.commands.CommandDescriptor;
 import joecord.seal.clapbot.commands.ConditionalCommand;
 import joecord.seal.clapbot.commands.MessageCommand;
 
 public class CommandHandler extends ListenerAdapter {
 
     private String prefix;
-    private HashMap<String, CommandDescriptor<? extends MessageCommand>> messageCommands;
-    private HashSet<CommandDescriptor<? extends ConditionalCommand>> conditionalCommands;
+    private HashMap<String, MessageCommand> messageCommands;
+    private HashSet<ConditionalCommand> conditionalCommands;
 
+    /**
+     * Construct a new command handler.
+     * @param prefix The prefix used for message commands, for example with
+     * prefix {@code !}, a command called {@code command} would be called by
+     * sending {@code !command} 
+     */
     public CommandHandler(String prefix){
         this.prefix = prefix;
         this.messageCommands = new HashMap<>();
         this.conditionalCommands = new HashSet<>();
     }
 
-    public void registerMessageCommand(CommandDescriptor<? extends MessageCommand> command) {
-        if(!messageCommands.containsKey(command.NAME)) {
-            messageCommands.put(command.NAME, command);
+    /**
+     * Register a message command
+     * @param command The command to register
+     */
+    public void register(MessageCommand command) {
+        if(!messageCommands.containsKey(command.getName())) {
+            messageCommands.put(command.getName(), command);
 
-            if(command.ALIASES.length != 0) {
-                for(String alias : command.ALIASES) {
+            String[] aliases = command.getAliases();
+
+            if(aliases.length != 0) {
+                for(String alias : aliases) {
                     if(!messageCommands.containsKey(alias)) {
                         messageCommands.put(alias, command);
                     }
@@ -37,7 +48,11 @@ public class CommandHandler extends ListenerAdapter {
         }
     }
 
-    public void registerConditonalCommand(CommandDescriptor<? extends ConditionalCommand> command) {
+    /**
+     * Register a conditional command
+     * @param command The command to register
+     */
+    public void register(ConditionalCommand command) {
         if(!conditionalCommands.contains(command)) {
             conditionalCommands.add(command);
         }
@@ -70,24 +85,14 @@ public class CommandHandler extends ListenerAdapter {
                     args = Arrays.copyOfRange(parts, 1, parts.length);
                 }
 
-                // Get the command
-                MessageCommand command =
-                    messageCommands.get(commandName)
-                    .getInstance(
-                        new Class<?>[] {MessageReceivedEvent.class}, 
-                        new Object[] {event});
-                
-                // Execute it
-                command.execute(args);
+                // Get the command and execute it
+                messageCommands.get(commandName).execute(event, args);
             }
         }
         else { // Handle conditional commands
-            for(CommandDescriptor<? extends ConditionalCommand> cd : conditionalCommands) {
-                ConditionalCommand command = cd.getInstance(
-                    new Class<?>[] {MessageReceivedEvent.class}, 
-                    new Object[] {event});
-                if(command.check()) {
-                    command.execute();
+            for(ConditionalCommand command : conditionalCommands) {
+                if(command.check(event)) {
+                    command.execute(event);
                 }
             }
         }
