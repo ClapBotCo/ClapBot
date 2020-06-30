@@ -35,6 +35,7 @@ public class ClapBot {
         this.commandHandler.register(new BanShadowCommand());
         this.commandHandler.register(new GnEmanCommand());
         this.commandHandler.register(new NotACultCommand());
+        this.commandHandler.register(new NerdDetectedCommand());
 
         this.commandHandler.register(new JoinMessageCommand("727104182787506187"));
             // Channel ID of #spam-claps in Bits and Bots
