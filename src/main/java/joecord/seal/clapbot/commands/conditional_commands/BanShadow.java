@@ -7,6 +7,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class BanShadow extends ConditionalCommand {
 
+    public static final String NAME = "Ban Shadow";
+    public static final String DESCRIPTION =
+        "Responds to 'shadow' with either '#ModShadow' or '#BanShadow'";
+
     public BanShadow(MessageReceivedEvent event) {
         super(event);
     }
@@ -23,15 +27,5 @@ public class BanShadow extends ConditionalCommand {
         return Pattern.matches(
             ".*shadow.*", 
             getMessage().getContentRaw().toLowerCase());
-    }
-
-    @Override
-    public String getName() {
-        return "Ban Shadow";
-    }
-
-    @Override
-    public String getDescription() {
-        return "Responds to 'shadow' with either '#ModShadow' or '#BanShadow'";
     }
 }

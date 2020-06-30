@@ -7,6 +7,11 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class NotACultCommand extends ConditionalCommand {
 
+    public static final String NAME = "Not a cult";
+    public static final String DESCRIPTION = 
+        "Notifys anyone that mentions 'cult' that that word is " + 
+        "forbidden here";
+
     public NotACultCommand(MessageReceivedEvent event) {
         super(event);
     }
@@ -18,20 +23,9 @@ public class NotACultCommand extends ConditionalCommand {
     }
 
     @Override
-    public String getName() {
-        return "Not a cult";
-    }
-
-    @Override
     public boolean check() {
         return Pattern.matches(
             ".*cult.*", 
             getMessage().getContentRaw().toLowerCase());
-    }
-
-    @Override
-    public String getDescription() {
-        return "Notifys anyone that mentions 'cult' that that word is " + 
-            "forbidden here";
     }
 }

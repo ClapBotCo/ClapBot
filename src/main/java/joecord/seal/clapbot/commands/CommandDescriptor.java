@@ -3,9 +3,21 @@ package joecord.seal.clapbot.commands;
 public class CommandDescriptor<T extends GenericCommand> implements GenericCommand {
     
     Class<T> commandClass;
+    public String NAME = "";
+    public String DESCRIPTION = "";
+    public String[] ALIASES = new String[0];
+    public String USAGE = "";
 
     public CommandDescriptor(Class<T> commandClass) {
         this.commandClass = commandClass;
+
+        try {
+            this.NAME = (String)commandClass.getField("NAME").get(null);
+            this.DESCRIPTION = (String)commandClass.getField("DESCRIPTION").get(null);
+            this.USAGE = (String)commandClass.getField("USAGE").get(null);
+            this.ALIASES = (String[])commandClass.getField("ALIASES").get(null);
+        }
+        catch(IllegalAccessException | NoSuchFieldException e) {}
     }
 
     public T getInstance(Class<?>[] initParamClasses, Object[] initParams) {
@@ -27,34 +39,5 @@ public class CommandDescriptor<T extends GenericCommand> implements GenericComma
     @Override
     public void execute(String[] arguments) {
         // Do nothing
-    }
-
-    @Override
-    public String getName() {
-        try {
-            return (String)commandClass.getField("name").get(null);
-        }
-        catch(IllegalAccessException | NoSuchFieldException e) {
-            return "";
-        }
-    }
-
-    @Override
-    public String getDescription() {
-        try {
-            return (String)commandClass.getField("description").get(null);
-        }
-        catch(IllegalAccessException | NoSuchFieldException e) {
-            return "";
-        }
-    }
-
-    public String[] getAliases() {
-        try {
-            return (String[])commandClass.getField("aliases").get(null);
-        }
-        catch(IllegalAccessException | NoSuchFieldException e) {
-            return new String[0];
-        }
     }
 }

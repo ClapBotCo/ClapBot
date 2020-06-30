@@ -24,11 +24,11 @@ public class CommandHandler extends ListenerAdapter {
     }
 
     public void registerMessageCommand(CommandDescriptor<? extends MessageCommand> command) {
-        if(!messageCommands.containsKey(command.getName())) {
-            messageCommands.put(command.getName(), command);
+        if(!messageCommands.containsKey(command.NAME)) {
+            messageCommands.put(command.NAME, command);
 
-            if(command.getAliases().length != 0) {
-                for(String alias : command.getAliases()) {
+            if(command.ALIASES.length != 0) {
+                for(String alias : command.ALIASES) {
                     if(!messageCommands.containsKey(alias)) {
                         messageCommands.put(alias, command);
                     }
