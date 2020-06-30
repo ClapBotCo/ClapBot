@@ -1,5 +1,6 @@
 package joecord.seal.clapbot;
 
+import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -7,14 +8,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import joecord.seal.clapbot.commands.ConditionalCommand;
-import joecord.seal.clapbot.commands.MessageCommand;
+import joecord.seal.clapbot.commands.memberJoin.MemberJoinCommand;
+import joecord.seal.clapbot.commands.conditional.ConditionalCommand;
+import joecord.seal.clapbot.commands.message.MessageCommand;
 
 public class CommandHandler extends ListenerAdapter {
 
     private String prefix;
     private HashMap<String, MessageCommand> messageCommands;
     private HashSet<ConditionalCommand> conditionalCommands;
+    private HashSet<MemberJoinCommand> memberJoinCommands;
 
     /**
      * Construct a new command handler.
@@ -58,6 +61,16 @@ public class CommandHandler extends ListenerAdapter {
         }
     }
 
+    /**
+     * Register a member join command
+     * @param command The command to register
+     */
+    public void register(MemberJoinCommand command) {
+        if(!memberJoinCommands.contains(command)) {
+            memberJoinCommands.add(command);
+        }
+    }
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
@@ -95,6 +108,16 @@ public class CommandHandler extends ListenerAdapter {
                     command.execute(event);
                 }
             }
+        }
+    }
+
+    @Override
+    public void onGuildMemberJoin(GuildMemberJoinEvent event) {
+        // Logging
+        System.out.print(event.getUser().getName() + " just joined");
+
+        for(MemberJoinCommand command : memberJoinCommands) {
+            command.execute(event);
         }
     }
 }
