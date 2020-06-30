@@ -29,6 +29,7 @@ public class CommandHandler extends ListenerAdapter {
         this.prefix = prefix;
         this.messageCommands = new HashMap<>();
         this.conditionalCommands = new HashSet<>();
+        this.memberJoinCommands = new HashSet<>();
     }
 
     /**
