@@ -1,6 +1,7 @@
 package joecord.seal.clapbot;
 
 import joecord.seal.clapbot.commands.conditional.*;
+import joecord.seal.clapbot.commands.memberJoin.JoinMessageCommand;
 import joecord.seal.clapbot.commands.message.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -30,9 +31,13 @@ public class ClapBot {
 
         // Register commands
         this.commandHandler.register(new EchoCommand());
-        this.commandHandler.register(new BanShadow());
+
+        this.commandHandler.register(new BanShadowCommand());
         this.commandHandler.register(new GnEmanCommand());
         this.commandHandler.register(new NotACultCommand());
+
+        this.commandHandler.register(new JoinMessageCommand("727104182787506187"));
+            // Channel ID of #spam-claps in Bits and Bots
     
         try {
             this.api = buildAPI();
