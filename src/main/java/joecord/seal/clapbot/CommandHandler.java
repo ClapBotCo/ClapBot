@@ -111,7 +111,7 @@ public class CommandHandler extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         // Logging
-        System.out.print(event.getUser().getName() + " just joined");
+        System.out.println(event.getUser().getName() + " just joined");
 
         for(AbstractMemberJoinCommand command : memberJoinCommands) {
             command.execute(event);
