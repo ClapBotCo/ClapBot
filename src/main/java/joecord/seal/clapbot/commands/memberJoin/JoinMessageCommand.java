@@ -28,4 +28,31 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
             .getTextChannelById(this.channelId)
             .sendMessage(msg.build());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        JoinMessageCommand other;
+
+        if(obj instanceof JoinMessageCommand) {
+            other = (JoinMessageCommand)obj;
+
+            if(other.getChannelId().equals(this.channelId) && 
+                other.getName().equals(this.name) &&
+                other.getDescription().equals(this.description)) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
+    }
+
+    /**
+     * Get the channel ID for join messages to be sent to.
+     * @return Channel ID string
+     */
+    public String getChannelId() {
+        return this.channelId;
+    }
 }
