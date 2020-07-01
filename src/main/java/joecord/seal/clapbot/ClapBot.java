@@ -3,6 +3,7 @@ package joecord.seal.clapbot;
 import joecord.seal.clapbot.commands.conditional.*;
 import joecord.seal.clapbot.commands.memberJoin.JoinMessageCommand;
 import joecord.seal.clapbot.commands.message.*;
+import joecord.seal.clapbot.commands.reactionAdd.AddRoleOnReactionAddCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -44,6 +45,11 @@ public class ClapBot {
 
         this.commandHandler.register(new JoinMessageCommand("727104182787506187"));
             // Channel ID of #spam-claps in Bits and Bots
+        
+        this.commandHandler.register(new AddRoleOnReactionAddCommand(
+            "727852002448637972", "joeclap", "724184550548308008"));
+            /* Currently set to a random message in #spam-claps and to the
+             * 'bots' role in Bits and Bots */
     
         try {
             this.api = buildAPI();
