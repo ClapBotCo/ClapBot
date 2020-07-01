@@ -7,6 +7,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
+
+import java.util.Arrays;
+import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
@@ -54,10 +59,23 @@ public class ClapBot {
     }
 
     public JDA buildAPI() throws LoginException {
-        return JDABuilder.createDefault(this.token)
+        List<GatewayIntent> intents = Arrays.asList(
+            GatewayIntent.GUILD_MESSAGES, // For MessageReceivedEvent
+            GatewayIntent.GUILD_MEMBERS, // For GuildMemberJoinEvent
+            GatewayIntent.GUILD_MESSAGE_REACTIONS // For reactions
+        );
+        List<CacheFlag> disabledCaches = Arrays.asList(
+            CacheFlag.ACTIVITY,
+            CacheFlag.CLIENT_STATUS,
+            CacheFlag.VOICE_STATE, 
+            CacheFlag.EMOTE
+        );
+
+        return JDABuilder.create(this.token, intents)
                 .setActivity(Activity.playing("TTT"))
                 .setStatus(OnlineStatus.IDLE)
                 .addEventListeners(this.commandHandler)
+                .disableCache(disabledCaches)
                 .build();
     }
 
