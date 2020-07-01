@@ -37,7 +37,7 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
         if(obj instanceof JoinMessageCommand) {
             other = (JoinMessageCommand)obj;
 
-            if(other.getChannelId().equals(this.channelId) && 
+            if(other.channelId.equals(this.channelId) && 
                 other.getName().equals(this.name) &&
                 other.getDescription().equals(this.description)) {
                     
@@ -46,13 +46,5 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
         }
 
         return equal;
-    }
-
-    /**
-     * Get the channel ID for join messages to be sent to.
-     * @return Channel ID string
-     */
-    public String getChannelId() {
-        return this.channelId;
     }
 }
