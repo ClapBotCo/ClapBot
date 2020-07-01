@@ -57,9 +57,7 @@ public class CommandHandler extends ListenerAdapter {
      * @param command The command to register
      */
     public void register(AbstractConditionalCommand command) {
-        if(!conditionalCommands.contains(command)) {
-            conditionalCommands.add(command);
-        }
+        conditionalCommands.add(command);
     }
 
     /**
@@ -67,9 +65,7 @@ public class CommandHandler extends ListenerAdapter {
      * @param command The command to register
      */
     public void register(AbstractMemberJoinCommand command) {
-        if(!memberJoinCommands.contains(command)) {
-            memberJoinCommands.add(command);
-        }
+        memberJoinCommands.add(command);
     }
 
     @Override
