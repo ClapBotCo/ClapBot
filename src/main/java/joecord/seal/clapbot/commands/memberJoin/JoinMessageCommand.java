@@ -21,12 +21,12 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
     @Override
     public void execute(GuildMemberJoinEvent event) {
         MessageBuilder msg = new MessageBuilder();
-        msg.append(event.getUser().getAsMention());
+        msg.append(event.getUser());
         msg.append(" has joined us! CLAP CLAP CLAP");
 
         event.getGuild()
             .getTextChannelById(this.channelId)
-            .sendMessage(msg.build());
+            .sendMessage(msg.build()).queue();
     }
 
     @Override
