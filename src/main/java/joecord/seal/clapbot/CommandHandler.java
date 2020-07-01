@@ -2,6 +2,7 @@ package joecord.seal.clapbot;
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import joecord.seal.clapbot.commands.memberJoin.AbstractMemberJoinCommand;
 import joecord.seal.clapbot.commands.conditional.AbstractConditionalCommand;
 import joecord.seal.clapbot.commands.message.AbstractMessageCommand;
+import joecord.seal.clapbot.commands.reactionAdd.AbstractReactionAddCommand;
 
 public class CommandHandler extends ListenerAdapter {
 
@@ -18,6 +20,7 @@ public class CommandHandler extends ListenerAdapter {
     private HashMap<String, AbstractMessageCommand> messageCommands;
     private HashSet<AbstractConditionalCommand> conditionalCommands;
     private HashSet<AbstractMemberJoinCommand> memberJoinCommands;
+    private HashSet<AbstractReactionAddCommand> reactionAddCommands;
 
     /**
      * Construct a new command handler.
@@ -30,6 +33,7 @@ public class CommandHandler extends ListenerAdapter {
         this.messageCommands = new HashMap<>();
         this.conditionalCommands = new HashSet<>();
         this.memberJoinCommands = new HashSet<>();
+        this.reactionAddCommands = new HashSet<>();
     }
 
     /**
@@ -66,6 +70,14 @@ public class CommandHandler extends ListenerAdapter {
      */
     public void register(AbstractMemberJoinCommand command) {
         memberJoinCommands.add(command);
+    }
+
+    /**
+     * Register a reaction add command
+     * @param command The command to register
+     */
+    public void register(AbstractReactionAddCommand command) {
+        reactionAddCommands.add(command);
     }
 
     @Override
@@ -116,5 +128,17 @@ public class CommandHandler extends ListenerAdapter {
         for(AbstractMemberJoinCommand command : memberJoinCommands) {
             command.execute(event);
         }
+    }
+
+    @Override
+    public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
+        // Logging
+        System.out.println(event.getUser().getName() + " just reacted " +
+            event.getReactionEmote().getName() + " to message id " + 
+            event.getMessageId());
+
+            for(AbstractReactionAddCommand command : reactionAddCommands) {
+                command.execute(event);
+            }
     }
 }
