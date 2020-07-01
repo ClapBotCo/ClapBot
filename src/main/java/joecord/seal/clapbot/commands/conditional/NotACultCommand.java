@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class NotACultCommand extends ConditionalCommand {
+public class NotACultCommand extends AbstractConditionalCommand {
 
     public NotACultCommand() {
         super(

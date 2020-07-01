@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import joecord.seal.clapbot.commands.memberJoin.MemberJoinCommand;
-import joecord.seal.clapbot.commands.conditional.ConditionalCommand;
-import joecord.seal.clapbot.commands.message.MessageCommand;
+import joecord.seal.clapbot.commands.memberJoin.AbstractMemberJoinCommand;
+import joecord.seal.clapbot.commands.conditional.AbstractConditionalCommand;
+import joecord.seal.clapbot.commands.message.AbstractMessageCommand;
 
 public class CommandHandler extends ListenerAdapter {
 
     private String prefix;
-    private HashMap<String, MessageCommand> messageCommands;
-    private HashSet<ConditionalCommand> conditionalCommands;
-    private HashSet<MemberJoinCommand> memberJoinCommands;
+    private HashMap<String, AbstractMessageCommand> messageCommands;
+    private HashSet<AbstractConditionalCommand> conditionalCommands;
+    private HashSet<AbstractMemberJoinCommand> memberJoinCommands;
 
     /**
      * Construct a new command handler.
@@ -36,7 +36,7 @@ public class CommandHandler extends ListenerAdapter {
      * Register a message command
      * @param command The command to register
      */
-    public void register(MessageCommand command) {
+    public void register(AbstractMessageCommand command) {
         if(!messageCommands.containsKey(command.getName())) {
             messageCommands.put(command.getName(), command);
 
@@ -56,7 +56,7 @@ public class CommandHandler extends ListenerAdapter {
      * Register a conditional command
      * @param command The command to register
      */
-    public void register(ConditionalCommand command) {
+    public void register(AbstractConditionalCommand command) {
         if(!conditionalCommands.contains(command)) {
             conditionalCommands.add(command);
         }
@@ -66,7 +66,7 @@ public class CommandHandler extends ListenerAdapter {
      * Register a member join command
      * @param command The command to register
      */
-    public void register(MemberJoinCommand command) {
+    public void register(AbstractMemberJoinCommand command) {
         if(!memberJoinCommands.contains(command)) {
             memberJoinCommands.add(command);
         }
@@ -104,7 +104,7 @@ public class CommandHandler extends ListenerAdapter {
             }
         }
         else { // Handle conditional commands
-            for(ConditionalCommand command : conditionalCommands) {
+            for(AbstractConditionalCommand command : conditionalCommands) {
                 if(command.check(event)) {
                     command.execute(event);
                 }
@@ -117,7 +117,7 @@ public class CommandHandler extends ListenerAdapter {
         // Logging
         System.out.print(event.getUser().getName() + " just joined");
 
-        for(MemberJoinCommand command : memberJoinCommands) {
+        for(AbstractMemberJoinCommand command : memberJoinCommands) {
             command.execute(event);
         }
     }

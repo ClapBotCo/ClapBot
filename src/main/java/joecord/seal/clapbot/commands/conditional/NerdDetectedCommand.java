@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.IMentionable;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class NerdDetectedCommand extends ConditionalCommand {
+public class NerdDetectedCommand extends AbstractConditionalCommand {
 
     private int counter;
 

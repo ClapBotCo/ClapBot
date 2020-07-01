@@ -2,7 +2,7 @@ package joecord.seal.clapbot.commands.message;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class EchoCommand extends MessageCommand {
+public class EchoCommand extends AbstractMessageCommand {
 
     public EchoCommand() {
         super(

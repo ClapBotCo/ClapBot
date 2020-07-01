@@ -3,7 +3,7 @@ package joecord.seal.clapbot.commands.message;
 import joecord.seal.clapbot.commands.GenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public abstract class MessageCommand implements 
+public abstract class AbstractMessageCommand implements 
     GenericCommand<MessageReceivedEvent> {
 
     protected String name;
@@ -18,7 +18,7 @@ public abstract class MessageCommand implements
      * @param usage The command's usage syntax
      * @param aliases All of the command's aliases
      */
-    public MessageCommand(String name, String description, String usage,
+    public AbstractMessageCommand(String name, String description, String usage,
         String[] aliases) {
         this.name = name;
         this.description = description;

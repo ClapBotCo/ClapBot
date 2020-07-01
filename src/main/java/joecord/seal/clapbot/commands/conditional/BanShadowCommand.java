@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class BanShadowCommand extends ConditionalCommand {
+public class BanShadowCommand extends AbstractConditionalCommand {
 
     public BanShadowCommand() {
         super(

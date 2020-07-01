@@ -3,7 +3,7 @@ package joecord.seal.clapbot.commands.conditional;
 import joecord.seal.clapbot.commands.GenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public abstract class ConditionalCommand
+public abstract class AbstractConditionalCommand
     implements GenericCommand<MessageReceivedEvent> {
 
     protected String name;
@@ -14,7 +14,7 @@ public abstract class ConditionalCommand
      * @param name The name of the command
      * @param description The description string of the command
      */
-    public ConditionalCommand(String name, String description) {
+    public AbstractConditionalCommand(String name, String description) {
         this.name = name;
         this.description = description;
     }

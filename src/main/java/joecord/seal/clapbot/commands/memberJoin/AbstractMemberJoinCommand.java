@@ -3,7 +3,7 @@ package joecord.seal.clapbot.commands.memberJoin;
 import joecord.seal.clapbot.commands.GenericCommand;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
-public abstract class MemberJoinCommand implements 
+public abstract class AbstractMemberJoinCommand implements 
     GenericCommand<GuildMemberJoinEvent> {
 
     protected String name;
@@ -14,7 +14,7 @@ public abstract class MemberJoinCommand implements
      * @param name The name of the command
      * @param description The description string of the command
      */
-    public MemberJoinCommand(String name, String description) {
+    public AbstractMemberJoinCommand(String name, String description) {
         this.name = name;
         this.description = description;
     }
