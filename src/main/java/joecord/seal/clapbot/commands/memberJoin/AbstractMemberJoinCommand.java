@@ -6,18 +6,10 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 public abstract class AbstractMemberJoinCommand implements 
     GenericCommand<GuildMemberJoinEvent> {
 
-    protected String name;
-    protected String description;
-
-    /**
-     * Construct a new message command.
-     * @param name The name of the command
-     * @param description The description string of the command
-     */
-    public AbstractMemberJoinCommand(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    /** The name of the command */
+    protected String name = "";
+    /** The description string of the command, detailing what it does */
+    protected String description = "";
 
     @Override
     public void execute(GuildMemberJoinEvent event, String[] arguments) {

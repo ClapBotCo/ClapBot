@@ -7,10 +7,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class NotACultCommand extends AbstractConditionalCommand {
 
     public NotACultCommand() {
-        super(
-            "Not a cult",
-            "Reminds people that 'cult' is a forbidden word here"
-        );
+        this.name = "Not a cult";
+        this.description = 
+            "Reminds people that 'cult' is a forbidden word here";
     }
 
     @Override

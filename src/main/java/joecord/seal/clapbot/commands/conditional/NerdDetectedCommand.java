@@ -8,14 +8,15 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class NerdDetectedCommand extends AbstractConditionalCommand {
 
+    /** A counter to keep track of the number of nerd words said before
+     * intervening */
     private int counter;
 
     public NerdDetectedCommand() {
-        super(
-            "Nerd detected",
-            "Reminds Alec & Nick to keep the nerd chat to #nerdclaps"
-        );
-        counter = 0;
+        this.name = "Nerd detected";
+        this.description =
+            "Reminds Alec & Nick to keep the nerd chat to #nerdclaps";
+        this.counter = 0;
     }
 
     @Override

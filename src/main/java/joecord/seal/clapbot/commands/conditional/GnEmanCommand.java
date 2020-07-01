@@ -7,10 +7,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class GnEmanCommand extends AbstractConditionalCommand {
 
     public GnEmanCommand() {
-        super(
-            "gn eman",
-            "Says gn to anyone that says 'gn modmail' :)"
-        );
+        this.name = "gn eman";
+        this.description = "Says gn to anyone that says 'gn modmail' :)";
     }
 
     @Override

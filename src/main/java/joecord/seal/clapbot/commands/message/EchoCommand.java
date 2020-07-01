@@ -5,12 +5,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class EchoCommand extends AbstractMessageCommand {
 
     public EchoCommand() {
-        super(
-            "echo", // Name
-            "Responds with the message provided to it", // Description
-            "echo <message to echo>", // Usage
-            new String[] {"say"} // Aliases
-        );
+        this.name = "echo";
+        this.description = "Responds with the message provided to it";
+        this.usage = "echo <message to echo>";
+        this.aliases = new String[] {"say"};
     }
 
     @Override

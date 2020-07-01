@@ -7,10 +7,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class BanShadowCommand extends AbstractConditionalCommand {
 
     public BanShadowCommand() {
-        super(
-            "Ban Shadow",
-            "Responds to 'shadow' with either '#ModShadow' or '#BanShadow'"
-        );
+        this.name = "Ban Shadow";
+        this.description = 
+            "Responds to 'shadow' with either '#ModShadow' or '#BanShadow'";
     }
 
     @Override

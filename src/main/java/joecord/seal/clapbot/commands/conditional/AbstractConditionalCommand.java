@@ -6,18 +6,10 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public abstract class AbstractConditionalCommand
     implements GenericCommand<MessageReceivedEvent> {
 
-    protected String name;
-    protected String description;
-
-    /**
-     * Construct a new conditional command.
-     * @param name The name of the command
-     * @param description The description string of the command
-     */
-    public AbstractConditionalCommand(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+    /** The name of the command */
+    protected String name = "";
+    /** The description string of the command, detailing what it does */
+    protected String description = "";
 
     @Override
     public void execute(MessageReceivedEvent event, String[] arguments) {

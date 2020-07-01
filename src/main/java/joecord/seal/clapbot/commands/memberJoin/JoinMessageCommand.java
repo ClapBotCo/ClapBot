@@ -5,9 +5,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 
 public class JoinMessageCommand extends AbstractMemberJoinCommand {
 
-    /**
-     * The channel ID to send join messages to
-     */
+    /** The channel ID to send join messages to */
     private String channelId;
     
     /**
@@ -15,10 +13,8 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
      * @param channelId The channel ID for join messages to be sent to
      */
     public JoinMessageCommand(String channelId) {
-        super(
-            "Join message", 
-            "Sends a join message whenever a new user joins"
-        );
+        this.name = "Join message";
+        this.description = "Sends a join message whenever a new user joins";
         this.channelId = channelId;
     }
 

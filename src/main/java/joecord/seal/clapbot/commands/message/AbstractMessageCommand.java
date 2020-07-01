@@ -6,25 +6,15 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public abstract class AbstractMessageCommand implements 
     GenericCommand<MessageReceivedEvent> {
 
-    protected String name;
-    protected String description;
-    protected String usage;
-    protected String[] aliases;
-
-    /**
-     * Construct a new message command.
-     * @param name The name of the command
-     * @param description The description string of the command
-     * @param usage The command's usage syntax
-     * @param aliases All of the command's aliases
-     */
-    public AbstractMessageCommand(String name, String description, String usage,
-        String[] aliases) {
-        this.name = name;
-        this.description = description;
-        this.usage = usage;
-        this.aliases = aliases;
-    }
+    /** The name of the command, used when the command is called */
+    protected String name = "";
+    /** The description string of the command, detailing what it does */
+    protected String description = "";
+    /** The usage syntax of the command, detailing how it is used */
+    protected String usage = "";
+    /** All of the command's aliases; alternate names that can be used to
+     * call the command */
+    protected String[] aliases = new String[0];
 
     @Override
     public void execute(MessageReceivedEvent event) {
