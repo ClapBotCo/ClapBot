@@ -1,7 +1,9 @@
 package joecord.seal.clapbot.commands.memberJoin;
 
-import net.dv8tion.jda.api.MessageBuilder;
+import joecord.seal.clapbot.commands.message.Embed;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+
+import static joecord.seal.clapbot.commands.message.Embed.eb;
 
 public class JoinMessageCommand extends AbstractMemberJoinCommand {
 
@@ -20,13 +22,11 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
 
     @Override
     public void execute(GuildMemberJoinEvent event) {
-        MessageBuilder msg = new MessageBuilder();
-        msg.append(event.getUser());
-        msg.append(" has joined us! CLAP CLAP CLAP");
+        Embed embed = new Embed("New member!", "Test", "Hey!");
 
         event.getGuild()
             .getTextChannelById(this.channelId)
-            .sendMessage(msg.build()).queue();
+            .sendMessage(eb.build()).queue();
     }
 
     @Override
