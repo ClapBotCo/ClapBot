@@ -37,6 +37,7 @@ public class ClapBot {
 
         // Register message commands
         this.commandHandler.register(new EchoCommand());
+        this.commandHandler.register(new PingCommand());
 
         // Register conditional commands
         this.commandHandler.register(new BanShadowCommand());
