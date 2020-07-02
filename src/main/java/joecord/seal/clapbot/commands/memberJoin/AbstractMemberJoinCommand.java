@@ -25,4 +25,22 @@ public abstract class AbstractMemberJoinCommand implements
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        AbstractMemberJoinCommand other;
+
+        if(obj instanceof AbstractMemberJoinCommand) {
+            other = (AbstractMemberJoinCommand)obj;
+
+            if(other.getName().equals(this.getName()) &&
+                other.getDescription().equals(this.getDescription())) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
+    }
 }

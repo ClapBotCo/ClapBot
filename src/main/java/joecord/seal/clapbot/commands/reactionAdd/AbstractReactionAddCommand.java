@@ -25,4 +25,22 @@ public abstract class AbstractReactionAddCommand implements
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        AbstractReactionAddCommand other;
+
+        if(obj instanceof AbstractReactionAddCommand) {
+            other = (AbstractReactionAddCommand)obj;
+
+            if(other.getName().equals(this.getName()) &&
+                other.getDescription().equals(this.getDescription())) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
+    }
 }

@@ -37,9 +37,8 @@ public class JoinMessageCommand extends AbstractMemberJoinCommand {
         if(obj instanceof JoinMessageCommand) {
             other = (JoinMessageCommand)obj;
 
-            if(other.channelId.equals(this.channelId) && 
-                other.getName().equals(this.name) &&
-                other.getDescription().equals(this.description)) {
+            if(super.equals(other) &&
+                other.channelId.equals(this.channelId)) {
                     
                 equal = true;
             }

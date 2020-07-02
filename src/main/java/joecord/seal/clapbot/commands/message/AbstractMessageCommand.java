@@ -1,5 +1,7 @@
 package joecord.seal.clapbot.commands.message;
 
+import java.util.Arrays;
+
 import joecord.seal.clapbot.commands.GenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -48,5 +50,25 @@ public abstract class AbstractMessageCommand implements
      */
     public String[] getAliases() {
         return aliases.clone();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        AbstractMessageCommand other;
+
+        if(obj instanceof AbstractMessageCommand) {
+            other = (AbstractMessageCommand)obj;
+
+            if(other.getName().equals(this.getName()) &&
+                other.getDescription().equals(this.getDescription()) &&
+                other.getUsage().equals(this.getUsage()) &&
+                Arrays.deepEquals(other.getAliases(), this.getAliases())) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
     }
 }

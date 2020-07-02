@@ -27,4 +27,22 @@ public abstract class AbstractConditionalCommand
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        AbstractConditionalCommand other;
+
+        if(obj instanceof AbstractConditionalCommand) {
+            other = (AbstractConditionalCommand)obj;
+
+            if(other.getName().equals(this.getName()) &&
+                other.getDescription().equals(this.getDescription())) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
+    }
 }

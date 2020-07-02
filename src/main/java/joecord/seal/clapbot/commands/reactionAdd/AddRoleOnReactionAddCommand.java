@@ -61,12 +61,10 @@ public class AddRoleOnReactionAddCommand extends AbstractReactionAddCommand {
         if(obj instanceof AddRoleOnReactionAddCommand) {
             other = (AddRoleOnReactionAddCommand)obj;
 
-            if(other.messageId.equals(this.messageId) && 
+            if(super.equals(other) &&
+                other.messageId.equals(this.messageId) && 
                 other.reactionName.equals(this.reactionName) &&
-                other.roleId.equals(this.roleId) &&
-                other.role.equals(this.role) &&
-                other.getName().equals(this.name) &&
-                other.getDescription().equals(this.description)) {
+                other.roleId.equals(this.roleId)) {
                     
                 equal = true;
             }

@@ -106,4 +106,24 @@ public class NerdDetectedCommand extends AbstractConditionalCommand {
 
         return counterExceeded;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean equal = false;
+        NerdDetectedCommand other;
+
+        if(obj instanceof NerdDetectedCommand) {
+            other = (NerdDetectedCommand)obj;
+
+            if(super.equals(other) &&
+                this.counter == other.counter &&
+                this.resetTimer.equals(other.resetTimer) &&
+                this.timerActive == other.timerActive) {
+                    
+                equal = true;
+            }
+        }
+
+        return equal;
+    }
 }
