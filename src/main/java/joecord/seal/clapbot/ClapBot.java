@@ -35,21 +35,24 @@ public class ClapBot {
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
         this.commandHandler = new CommandHandler("clap ");
 
-        // Register commands
+        // Register message commands
         this.commandHandler.register(new EchoCommand());
 
+        // Register conditional commands
         this.commandHandler.register(new BanShadowCommand());
         this.commandHandler.register(new GnEmanCommand());
         this.commandHandler.register(new NotACultCommand());
         this.commandHandler.register(new NerdDetectedCommand());
 
+        // Register member join commands
         this.commandHandler.register(new JoinMessageCommand("727104182787506187"));
             // Channel ID of #spam-claps in Bits and Bots
         
+        // Register reaction add commands
         this.commandHandler.register(new AddRoleOnReactionAddCommand(
-            "727852002448637972", "joeclap", "724184550548308008"));
-            /* Currently set to a random message in #spam-claps and to the
-             * 'bots' role in Bits and Bots */
+            "728136956646522920", // Some random message ID in #spam-claps
+            "U+1f973", // :partying_face:
+            "728136332202999849" /* The @PeasantClaps role ID */));
     
         try {
             this.api = buildAPI();
