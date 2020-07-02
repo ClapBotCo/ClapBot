@@ -4,10 +4,13 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import joecord.seal.clapbot.commands.memberJoin.AbstractMemberJoinCommand;
 import joecord.seal.clapbot.commands.conditional.AbstractConditionalCommand;
@@ -34,6 +37,22 @@ public class CommandHandler extends ListenerAdapter {
         this.conditionalCommands = new HashSet<>();
         this.memberJoinCommands = new HashSet<>();
         this.reactionAddCommands = new HashSet<>();
+    }
+
+    public List<GatewayIntent> getIntents() {
+        LinkedList<GatewayIntent> intents = new LinkedList<>();
+
+        if(!this.messageCommands.isEmpty()) {
+            intents.add(GatewayIntent.GUILD_MESSAGES);
+        }
+        if(!this.memberJoinCommands.isEmpty()) {
+            intents.add(GatewayIntent.GUILD_MEMBERS);
+        }
+        if(!this.reactionAddCommands.isEmpty()) {
+            intents.add(GatewayIntent.GUILD_MESSAGE_REACTIONS);
+        }
+
+        return intents;
     }
 
     /**

@@ -70,11 +70,6 @@ public class ClapBot {
 
     public JDA buildAPI() throws LoginException, InterruptedException {
         JDA api;
-        List<GatewayIntent> intents = Arrays.asList(
-            GatewayIntent.GUILD_MESSAGES, // For MessageReceivedEvent
-            GatewayIntent.GUILD_MEMBERS, // For GuildMemberJoinEvent
-            GatewayIntent.GUILD_MESSAGE_REACTIONS // For reactions
-        );
         List<CacheFlag> disabledCaches = Arrays.asList(
             CacheFlag.ACTIVITY,
             CacheFlag.CLIENT_STATUS,
@@ -82,7 +77,7 @@ public class ClapBot {
             CacheFlag.EMOTE
         );
 
-        api = JDABuilder.create(this.token, intents)
+        api = JDABuilder.create(this.token, commandHandler.getIntents())
             .setActivity(Activity.playing("Starting up..."))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
             .addEventListeners(this.commandHandler)
