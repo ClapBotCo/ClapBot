@@ -56,9 +56,9 @@ public class ClapBot {
     
         try {
             this.api = buildAPI();
-        } catch (LoginException e) {
+        } catch (LoginException | InterruptedException e) {
             System.out.println("Error creating bot API");
-            System.out.println(e);
+            e.printStackTrace();
             System.exit(0);
         }
     }
@@ -67,7 +67,8 @@ public class ClapBot {
         this(System.getenv("DISCORD_CLAPBOT_TOKEN"));
     }
 
-    public JDA buildAPI() throws LoginException {
+    public JDA buildAPI() throws LoginException, InterruptedException {
+        JDA api;
         List<GatewayIntent> intents = Arrays.asList(
             GatewayIntent.GUILD_MESSAGES, // For MessageReceivedEvent
             GatewayIntent.GUILD_MEMBERS, // For GuildMemberJoinEvent
@@ -80,12 +81,20 @@ public class ClapBot {
             CacheFlag.EMOTE
         );
 
-        return JDABuilder.create(this.token, intents)
-                .setActivity(Activity.playing("TTT"))
-                .setStatus(OnlineStatus.IDLE)
-                .addEventListeners(this.commandHandler)
-                .disableCache(disabledCaches)
-                .build();
+        api = JDABuilder.create(this.token, intents)
+            .setActivity(Activity.playing("Starting up..."))
+            .setStatus(OnlineStatus.DO_NOT_DISTURB)
+            .addEventListeners(this.commandHandler)
+            .disableCache(disabledCaches)
+            .build();
+
+        // Wait for the bot to finish starting up
+        api.awaitReady();
+
+        api.getPresence()
+            .setPresence(OnlineStatus.ONLINE, Activity.playing("TTT"));
+
+        return api;
     }
 
     public CommandHandler getCommandHandler() {
