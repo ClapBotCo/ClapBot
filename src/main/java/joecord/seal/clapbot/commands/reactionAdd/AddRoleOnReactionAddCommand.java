@@ -1,10 +1,13 @@
 package joecord.seal.clapbot.commands.reactionAdd;
 
+import joecord.seal.clapbot.api.CommandProperty;
+import joecord.seal.clapbot.api.GenericCommand;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
-public class AddRoleOnReactionAddCommand extends AbstractReactionAddCommand {
+public class AddRoleOnReactionAddCommand extends 
+    GenericCommand<GuildMessageReactionAddEvent> {
 
     /** The ISnowflake ID of the message that this command watches reactions of
     */
@@ -32,8 +35,10 @@ public class AddRoleOnReactionAddCommand extends AbstractReactionAddCommand {
      */
     public AddRoleOnReactionAddCommand(String messageId, String emoteName,
         String roleId) {
+
+        super(CommandProperty.CONDITIONAL);
         
-        this.name = "Add role on reaction add";
+        this.displayName = "Add role on reaction add";
         this.description = "Gives a user that reacts to a specific message " +
             "with a specific emote a specific role";
         this.messageId = messageId;
@@ -41,21 +46,21 @@ public class AddRoleOnReactionAddCommand extends AbstractReactionAddCommand {
         this.roleId = roleId;
         this.role = null;
         this.isEmoji = emoteName.startsWith("U+");
+
+        super.setConditionDesc("Only activates on message ID " +
+            this.messageId + " and with emote " + emoteName);
+        super.setCondition(event -> checkMessageAndEmote(event));
     }
 
 
     @Override
     public void execute(GuildMessageReactionAddEvent event) {
-
-        if(checkMessageAndEmote(event)) {
-
-            if(this.role == null) {
-                this.role = event.getGuild().getRoleById(this.roleId);
-            }
-
-            event.getGuild().addRoleToMember(event.getUserId(), this.role)
-                .queue();
+        if(this.role == null) {
+            this.role = event.getGuild().getRoleById(this.roleId);
         }
+
+        event.getGuild().addRoleToMember(event.getUserId(), this.role)
+            .queue();
     }
 
     @Override

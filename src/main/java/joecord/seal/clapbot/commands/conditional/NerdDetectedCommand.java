@@ -3,11 +3,13 @@ package joecord.seal.clapbot.commands.conditional;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import joecord.seal.clapbot.api.CommandProperty;
+import joecord.seal.clapbot.api.GenericCommand;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.IMentionable;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class NerdDetectedCommand extends AbstractConditionalCommand {
+public class NerdDetectedCommand extends GenericCommand<MessageReceivedEvent> {
 
     /** Triggers when the counter reaches this number */
     private static final int COUNTER_MAX = 4;
@@ -25,14 +27,26 @@ public class NerdDetectedCommand extends AbstractConditionalCommand {
     private boolean timerActive;
 
     public NerdDetectedCommand() {
-        this.name = "Nerd detected";
+        super(CommandProperty.CONDITIONAL, CommandProperty.PRIVELAGED);
+
+        this.displayName = "Nerd detected";
         this.description = String.format((
-            "Reminds Alec & Nick to keep the nerd chat to #nerdclaps if " + 
-            "they send %d or more nerdy messages in the span of %d minutes"),
+            "Reminds Alec & Nick to keep the nerd chat to #nerdclaps if " +
+            "they send too many nerd messages"),
              COUNTER_MAX, (TIMER_MILLISECONDS / 60000));
         this.counter = 0;
         this.resetTimer = new Timer();
         this.timerActive = false;
+
+        super.setConditionDesc(String.format(
+            "Message must be one of %d messages sent outside of #nerdclaps " +
+            "within the last %d minutes that has contained a nerd word",
+            COUNTER_MAX, (TIMER_MILLISECONDS / 60000)));
+        super.setCondition(event -> this.check(event));
+        super.setPrivelageDesc("Only triggers on Alec or Nick");
+        super.setPrivelage(event -> 
+            event.getAuthor().getIdLong() == 175851085456474113l ||
+                event.getAuthor().getIdLong() == 297978513250713602l);
     }
 
     @Override
@@ -53,20 +67,25 @@ public class NerdDetectedCommand extends AbstractConditionalCommand {
         event.getChannel().sendMessage(msg.build()).queue();
     }
 
-    @Override
-    public boolean check(MessageReceivedEvent event) {
+    /**
+     * Private method to put condition logic rather than clogging up the
+     * constructor.
+     * @param event The MessageReceivedEvent that the command concerns
+     * @return Tru
+     */
+    private boolean check(MessageReceivedEvent event) {
         boolean counterExceeded = false;
-        String[] nerdWords = new String[] {
-            "java", "sql", "o(", "pointer", "int", "osi", "tcp", "ip", "layer",
-            "c89", "py", "git", "port", "interface", "class", "method",
-            "time complexity", "dsa", "ucp", "oopd", "oose", "fop", "mad",
-            "ptd", "os", "network", "dave", "mark", "antoni", "wanquan",
-            "stack", "memory"};
+            String[] nerdWords = new String[] {
+                "java", "sql", "o(", "pointer", "int", "osi", "tcp", "ip",
+                "layer", "c89", "py", "git", "port", "interface", "class",
+                "method", "time complexity", "dsa", "ucp", "oopd", "oose",
+                "fop", "mad", "ptd", "os", "network", "dave", "mark", "antoni",
+                "wanquan", "stack", "memory"};
 
-        // Make sure it's sent by Alec or Nick and not in already in nerdclaps
-        if(!event.getTextChannel().getId().equals("643815565533642773") &&
-            (event.getAuthor().getId().equals("175851085456474113") ||
-            event.getAuthor().getId().equals("297978513250713602"))) {
+            // Make sure it's not in already in nerdclaps
+            if(event.getTextChannel().getIdLong() == 643815565533642773l) {
+                return false;
+            }
 
             for(String word : nerdWords) {
                 if(event.getMessage().getContentRaw().toLowerCase()
@@ -76,19 +95,19 @@ public class NerdDetectedCommand extends AbstractConditionalCommand {
                     if(counter >= COUNTER_MAX) {
                         counter = 0;
                         counterExceeded = true;
-                        if(timerActive) {
+                        if(this.timerActive) {
                             this.resetTimer.cancel();
-                            timerActive = false;
+                            this.timerActive = false;
                         }
                         break;
                     }
 
                     /* Restart the timer, this resets the counter to zero if
-                     * no nerd messages are sent in a TIMER_MILLISECONDS
-                     * window */
-                    if(timerActive) {
+                    * no nerd messages are sent in a TIMER_MILLISECONDS
+                    * window */
+                    if(this.timerActive) {
                         this.resetTimer.cancel();
-                        timerActive = false;
+                        this.timerActive = false;
                     }
                     this.resetTimer = new Timer();
                     this.resetTimer.schedule(
@@ -102,28 +121,7 @@ public class NerdDetectedCommand extends AbstractConditionalCommand {
                     timerActive = true;
                 }
             }
-        }
 
-        return counterExceeded;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        boolean equal = false;
-        NerdDetectedCommand other;
-
-        if(obj instanceof NerdDetectedCommand) {
-            other = (NerdDetectedCommand)obj;
-
-            if(super.equals(other) &&
-                this.counter == other.counter &&
-                this.resetTimer.equals(other.resetTimer) &&
-                this.timerActive == other.timerActive) {
-                    
-                equal = true;
-            }
-        }
-
-        return equal;
+            return counterExceeded;
     }
 }
