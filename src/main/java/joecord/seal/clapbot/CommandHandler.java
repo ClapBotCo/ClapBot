@@ -1,56 +1,48 @@
 package joecord.seal.clapbot;
 
-import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.events.GenericEvent;
+import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import joecord.seal.clapbot.commands.memberJoin.AbstractMemberJoinCommand;
-import joecord.seal.clapbot.commands.conditional.AbstractConditionalCommand;
-import joecord.seal.clapbot.commands.message.AbstractMessageCommand;
-import joecord.seal.clapbot.commands.reactionAdd.AbstractReactionAddCommand;
-
-public class CommandHandler extends ListenerAdapter {
+public class CommandHandler implements EventListener {
 
     private String prefix;
-    private HashMap<String, AbstractMessageCommand> messageCommands;
-    private HashSet<AbstractConditionalCommand> conditionalCommands;
-    private HashSet<AbstractMemberJoinCommand> memberJoinCommands;
-    private HashSet<AbstractReactionAddCommand> reactionAddCommands;
+    // TODO Data structure(s) to map event types to multiple stored commands
 
     /**
      * Construct a new command handler.
      * @param prefix The prefix used for message commands, for example with
-     * prefix {@code !}, a command called {@code command} would be called by
-     * sending {@code !command} 
+     * prefix {@code !}, an invokable command called {@code command} would be
+     * called by sending {@code !command} 
      */
-    public CommandHandler(String prefix){
+    public CommandHandler(String prefix) {
         this.prefix = prefix;
-        this.messageCommands = new HashMap<>();
-        this.conditionalCommands = new HashSet<>();
-        this.memberJoinCommands = new HashSet<>();
-        this.reactionAddCommands = new HashSet<>();
+        // TODO Initialise Data structure(s)
+    }
+
+    public void register(/* A command */) {
+        // TODO Add the command to the data structure(s)
+    }
+
+    @Override
+    public void onEvent(GenericEvent event) {
+        /* TODO Iterate through the data structures for this event type, do
+         * specific actions based on their properties and call execute() on
+         * them */ 
+    }
+    
+    public String getPrefix() {
+        return this.prefix;
     }
 
     public List<GatewayIntent> getIntents() {
         LinkedList<GatewayIntent> intents = new LinkedList<>();
 
-        if(!this.messageCommands.isEmpty()) {
-            intents.add(GatewayIntent.GUILD_MESSAGES);
-        }
-        if(!this.memberJoinCommands.isEmpty()) {
-            intents.add(GatewayIntent.GUILD_MEMBERS);
-        }
-        if(!this.reactionAddCommands.isEmpty()) {
-            intents.add(GatewayIntent.GUILD_MESSAGE_REACTIONS);
-        }
+        /* TODO Iterate throgh the registered commands and resolve a list
+         * of gateway intents that the JDA needs */
 
         return intents;
     }
@@ -59,9 +51,10 @@ public class CommandHandler extends ListenerAdapter {
      * Register a message command
      * @param command The command to register
      */
+    /* Old code
     public void register(AbstractMessageCommand command) {
-        if(!messageCommands.containsKey(command.getName())) {
-            messageCommands.put(command.getName(), command);
+        if(!messageCommands.containsKey(command.getDisplayName())) {
+            messageCommands.put(command.getDisplayName(), command);
 
             String[] aliases = command.getAliases();
 
@@ -73,32 +66,9 @@ public class CommandHandler extends ListenerAdapter {
                 }
             }
         }
-    }
+    } */
 
-    /**
-     * Register a conditional command
-     * @param command The command to register
-     */
-    public void register(AbstractConditionalCommand command) {
-        conditionalCommands.add(command);
-    }
-
-    /**
-     * Register a member join command
-     * @param command The command to register
-     */
-    public void register(AbstractMemberJoinCommand command) {
-        memberJoinCommands.add(command);
-    }
-
-    /**
-     * Register a reaction add command
-     * @param command The command to register
-     */
-    public void register(AbstractReactionAddCommand command) {
-        reactionAddCommands.add(command);
-    }
-
+    /* Old Code
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
@@ -137,8 +107,9 @@ public class CommandHandler extends ListenerAdapter {
                 }
             }
         }
-    }
+    } */
 
+    /* Old code
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         // Logging
@@ -147,8 +118,9 @@ public class CommandHandler extends ListenerAdapter {
         for(AbstractMemberJoinCommand command : memberJoinCommands) {
             command.execute(event);
         }
-    }
+    } */
 
+    /* Old code
     @Override
     public void onGuildMessageReactionAdd(GuildMessageReactionAddEvent event) {
         // Logging
@@ -159,5 +131,5 @@ public class CommandHandler extends ListenerAdapter {
             for(AbstractReactionAddCommand command : reactionAddCommands) {
                 command.execute(event);
             }
-    }
+    } */
 }

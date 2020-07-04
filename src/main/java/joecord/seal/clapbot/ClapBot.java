@@ -1,9 +1,5 @@
 package joecord.seal.clapbot;
 
-import joecord.seal.clapbot.commands.conditional.*;
-import joecord.seal.clapbot.commands.memberJoin.JoinMessageCommand;
-import joecord.seal.clapbot.commands.message.*;
-import joecord.seal.clapbot.commands.reactionAdd.AddRoleOnReactionAddCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -34,6 +30,8 @@ public class ClapBot {
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
         this.commandHandler = new CommandHandler("clap ");
 
+        /* TODO Updated command registration based on CommandHandler rewrite
+
         // Register message commands
         this.commandHandler.register(new EchoCommand());
         this.commandHandler.register(new PingCommand());
@@ -52,8 +50,9 @@ public class ClapBot {
         this.commandHandler.register(new AddRoleOnReactionAddCommand(
             "728136956646522920", // Some random message ID in #spam-claps
             "U+1f973", // :partying_face:
-            "728136332202999849" /* The @PeasantClaps role ID */));
-    
+            "728136332202999849")); // The @PeasantClaps role ID
+        */
+        
         try {
             this.api = buildAPI();
         } catch (LoginException | InterruptedException e) {
