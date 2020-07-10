@@ -11,6 +11,11 @@ import java.util.List;
 
 import javax.security.auth.login.LoginException;
 
+import joecord.seal.clapbot.commands.conditional.*;
+import joecord.seal.clapbot.commands.memberJoin.*;
+import joecord.seal.clapbot.commands.message.*;
+import joecord.seal.clapbot.commands.reactionAdd.*;
+
 public class ClapBot {
 
     private static ClapBot instance;
@@ -29,8 +34,6 @@ public class ClapBot {
         System.out.println(token);
         //JoeCord :joeclap: is <:joeclap:551531713487175682>
         this.commandHandler = new CommandHandler("clap ");
-
-        /* TODO Updated command registration based on CommandHandler rewrite
 
         // Register message commands
         this.commandHandler.register(new EchoCommand());
@@ -51,7 +54,6 @@ public class ClapBot {
             "728136956646522920", // Some random message ID in #spam-claps
             "U+1f973", // :partying_face:
             "728136332202999849")); // The @PeasantClaps role ID
-        */
         
         try {
             this.api = buildAPI();
@@ -78,7 +80,7 @@ public class ClapBot {
         api = JDABuilder.create(this.token, commandHandler.getRequiredIntents())
             .setActivity(Activity.playing("Starting up..."))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
-            .addEventListeners(this.commandHandler)
+            .addEventListeners(new Listener(this.commandHandler))
             .disableCache(disabledCaches)
             .build();
 
