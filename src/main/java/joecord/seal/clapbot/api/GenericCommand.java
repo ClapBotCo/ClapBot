@@ -19,6 +19,8 @@ public abstract class GenericCommand<T extends Event> {
     protected String displayName = null;
     protected String description = null;
 
+    protected Class<T> eventClass = null;
+
     /**
      * A set of the {@link joecord.seal.clapbot.api.CommandProperty 
      * CommandProperty}'s that this command has registered.
@@ -111,12 +113,34 @@ public abstract class GenericCommand<T extends Event> {
         return this.description;
     }
 
+    public Class<T> getEventClass() {
+        return this.eventClass;
+    }
+
     /**
      * Returns an unmodifiable version of the properties set for this command.
      * @return (Unmodifiable) set of CommandProperties
      */
     public Set<CommandProperty> getProperties() {
         return Collections.unmodifiableSet(this.properties);
+    }
+
+    /**
+     * Returns true iff all given properties are contained in this command's
+     * properties set.
+     * @param property The first property to check
+     * @param properties Any additional properties to check
+     * @return True iff the command has all given properties
+     */
+    public boolean hasProperties(CommandProperty property,
+        CommandProperty... properties) {
+        for(CommandProperty prop : properties) {
+            if(!this.properties.contains(prop)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Handle CommandProperty.INVOKED

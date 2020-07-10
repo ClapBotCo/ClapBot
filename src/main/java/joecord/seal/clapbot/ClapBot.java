@@ -75,7 +75,7 @@ public class ClapBot {
             CacheFlag.EMOTE
         );
 
-        api = JDABuilder.create(this.token, commandHandler.getIntents())
+        api = JDABuilder.create(this.token, commandHandler.getRequiredIntents())
             .setActivity(Activity.playing("Starting up..."))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
             .addEventListeners(this.commandHandler)

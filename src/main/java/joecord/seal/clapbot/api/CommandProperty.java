@@ -63,7 +63,13 @@ public enum CommandProperty {
      * setArgumentsDesc(String)} with a description of the command's usage
      * syntax at construction time.
      */
-    USES_ARGUMENTS;
+    USES_ARGUMENTS,
+    
+    /**
+     * Command will be triggered even if the user that the event concerns is
+     * a bot.
+     */
+    RESPECT_BOTS;
 
     @Override
     public String toString() {
