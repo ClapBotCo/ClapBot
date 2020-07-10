@@ -40,6 +40,7 @@ public class ClapBot {
         this.commandHandler.register(new PingCommand());
 
         // Register conditional commands
+        this.commandHandler.register(new LoggingCommand());
         this.commandHandler.register(new BanShadowCommand());
         this.commandHandler.register(new GnEmanCommand());
         this.commandHandler.register(new NotACultCommand());
