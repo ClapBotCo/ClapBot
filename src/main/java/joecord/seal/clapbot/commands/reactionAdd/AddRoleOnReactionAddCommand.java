@@ -36,7 +36,7 @@ public class AddRoleOnReactionAddCommand extends
     public AddRoleOnReactionAddCommand(String messageId, String emoteName,
         String roleId) {
 
-        super(CommandProperty.CONDITIONAL);
+        super(GuildMessageReactionAddEvent.class, CommandProperty.CONDITIONAL);
         
         this.displayName = "Add role on reaction add";
         this.description = "Gives a user that reacts to a specific message " +

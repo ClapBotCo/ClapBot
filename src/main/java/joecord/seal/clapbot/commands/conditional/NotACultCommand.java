@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class NotACultCommand extends GenericCommand<MessageReceivedEvent> {
 
     public NotACultCommand() {
-        super(CommandProperty.CONDITIONAL);
+        super(MessageReceivedEvent.class, CommandProperty.CONDITIONAL);
 
         this.displayName = "Not a cult";
         this.description = 

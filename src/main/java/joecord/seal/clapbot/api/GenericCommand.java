@@ -9,12 +9,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import joecord.seal.clapbot.CommandHandler;
-import net.dv8tion.jda.api.events.Event;
+import net.dv8tion.jda.api.events.GenericEvent;
 
 /**
  * Used to create a command
  */
-public abstract class GenericCommand<T extends Event> {
+public abstract class GenericCommand<T extends GenericEvent> {
 
     protected String displayName = null;
     protected String description = null;
@@ -69,26 +69,29 @@ public abstract class GenericCommand<T extends Event> {
     private String argumentsDesc = null;
 
     /**
-     * Construct a new GenericCommand with no registered command properties.
+     * Construct a new GenericCommand with the given event class and registered
+     * command properties.
+     * @param eventClass The subclass of GenericEvent that this command
+     * responds to
+     * @param properties Zero or more CommandPropertys to register
      */
-    public GenericCommand() {}
-
-    /**
-     * Construct a new GenericCommand with the given registered command
-     * properties.
-     * @param properties A collection of CommandPropertys to register
-     */
-    public GenericCommand(Collection<CommandProperty> properties) {
-        this.properties.addAll(properties);
+    public GenericCommand(Class<T> eventClass, CommandProperty... properties) {
+        this.eventClass = eventClass;
+        this.properties.addAll(Arrays.asList(properties));
     }
 
     /**
-     * Construct a new GenericCommand with the given registered command
-     * properties.
-     * @param properties Varags or array of CommandPropertys to register
+     * Construct a new GenericCommand with the given event class and registered
+     * command properties.
+     * @param eventClass The subclass of GenericEvent that this command
+     * responds to
+     * @param properties A collection of CommandPropertys to register
      */
-    public GenericCommand(CommandProperty... properties) {
-        this.properties.addAll(Arrays.asList(properties));
+    public GenericCommand(Class<T> eventClass,
+        Collection<CommandProperty> properties) {
+
+        this.eventClass = eventClass;
+        this.properties.addAll(properties);
     }
 
     /**
@@ -128,12 +131,12 @@ public abstract class GenericCommand<T extends Event> {
     /**
      * Returns true iff all given properties are contained in this command's
      * properties set.
-     * @param property The first property to check
-     * @param properties Any additional properties to check
+     * 
+     * If no properties are specified the check is vacuously true.
+     * @param properties Zero or more properties to check
      * @return True iff the command has all given properties
      */
-    public boolean hasProperties(CommandProperty property,
-        CommandProperty... properties) {
+    public boolean hasProperties(CommandProperty... properties) {
         for(CommandProperty prop : properties) {
             if(!this.properties.contains(prop)) {
                 return false;
@@ -310,7 +313,8 @@ public abstract class GenericCommand<T extends Event> {
         if(!this.properties.contains(property)) {
             throw new IllegalArgumentException(
                 "Cannot perform " + property.toString() + 
-                " operation without declaring command property");
+                " operation without declaring command property for command " +
+                this.displayName + ".");
         }
     }
 }

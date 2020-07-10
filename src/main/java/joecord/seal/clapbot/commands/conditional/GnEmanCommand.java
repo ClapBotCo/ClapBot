@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class GnEmanCommand extends GenericCommand<MessageReceivedEvent> {
 
     public GnEmanCommand() {
-        super(CommandProperty.CONDITIONAL);
+        super(MessageReceivedEvent.class, CommandProperty.CONDITIONAL);
 
         this.displayName = "gn eman";
         this.description = "Says gn to anyone that says 'gn modmail' :)";

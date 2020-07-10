@@ -14,7 +14,7 @@ public class JoinMessageCommand extends GenericCommand<GuildMemberJoinEvent> {
      * @param channelId The channel ID for join messages to be sent to
      */
     public JoinMessageCommand(String channelId) {
-        super();
+        super(GuildMemberJoinEvent.class);
 
         this.displayName = "Join message";
         this.description = "Sends a join message whenever a new user joins";

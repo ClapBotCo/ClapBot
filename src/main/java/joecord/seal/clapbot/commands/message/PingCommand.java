@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class PingCommand extends GenericCommand<MessageReceivedEvent> {
     
     public PingCommand() {
-        super(CommandProperty.INVOKED);
+        super(MessageReceivedEvent.class, CommandProperty.INVOKED);
 
         this.displayName = "Ping";
         this.description = "Gets the bot's response time in milliseconds";

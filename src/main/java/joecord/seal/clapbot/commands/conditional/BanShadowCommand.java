@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class BanShadowCommand extends GenericCommand<MessageReceivedEvent> {
 
     public BanShadowCommand() {
-        super(CommandProperty.CONDITIONAL);
+        super(MessageReceivedEvent.class, CommandProperty.CONDITIONAL);
 
         this.displayName = "Ban Shadow";
         this.description = 

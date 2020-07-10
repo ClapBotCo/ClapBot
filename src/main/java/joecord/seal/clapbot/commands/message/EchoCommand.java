@@ -7,7 +7,8 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class EchoCommand extends GenericCommand<MessageReceivedEvent> {
 
     public EchoCommand() {
-        super(CommandProperty.INVOKED, CommandProperty.USES_ARGUMENTS);
+        super(MessageReceivedEvent.class, 
+            CommandProperty.INVOKED, CommandProperty.USES_ARGUMENTS);
 
         this.displayName = "Echo";
         this.description = "Responds with the message provided to it";

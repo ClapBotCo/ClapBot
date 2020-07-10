@@ -27,7 +27,8 @@ public class NerdDetectedCommand extends GenericCommand<MessageReceivedEvent> {
     private boolean timerActive;
 
     public NerdDetectedCommand() {
-        super(CommandProperty.CONDITIONAL, CommandProperty.PRIVELAGED);
+        super(MessageReceivedEvent.class,
+            CommandProperty.CONDITIONAL, CommandProperty.PRIVELAGED);
 
         this.displayName = "Nerd detected";
         this.description = String.format((
