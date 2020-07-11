@@ -1,9 +1,5 @@
 package joecord.seal.clapbot;
 
-import joecord.seal.clapbot.commands.conditional.*;
-import joecord.seal.clapbot.commands.memberJoin.JoinMessageCommand;
-import joecord.seal.clapbot.commands.message.*;
-import joecord.seal.clapbot.commands.reactionAdd.AddRoleOnReactionAddCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -14,6 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.security.auth.login.LoginException;
+
+import joecord.seal.clapbot.commands.conditional.*;
+import joecord.seal.clapbot.commands.memberJoin.*;
+import joecord.seal.clapbot.commands.message.*;
+import joecord.seal.clapbot.commands.reactionAdd.*;
 
 public class ClapBot {
 
@@ -39,6 +40,7 @@ public class ClapBot {
         this.commandHandler.register(new PingCommand());
 
         // Register conditional commands
+        this.commandHandler.register(new LoggingCommand());
         this.commandHandler.register(new BanShadowCommand());
         this.commandHandler.register(new GnEmanCommand());
         this.commandHandler.register(new NotACultCommand());
@@ -52,8 +54,8 @@ public class ClapBot {
         this.commandHandler.register(new AddRoleOnReactionAddCommand(
             "728136956646522920", // Some random message ID in #spam-claps
             "U+1f973", // :partying_face:
-            "728136332202999849" /* The @PeasantClaps role ID */));
-    
+            "728136332202999849")); // The @PeasantClaps role ID
+        
         try {
             this.api = buildAPI();
         } catch (LoginException | InterruptedException e) {
@@ -76,10 +78,10 @@ public class ClapBot {
             CacheFlag.EMOTE
         );
 
-        api = JDABuilder.create(this.token, commandHandler.getIntents())
+        api = JDABuilder.create(this.token, commandHandler.getRequiredIntents())
             .setActivity(Activity.playing("Starting up..."))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
-            .addEventListeners(this.commandHandler)
+            .addEventListeners(new Listener(this.commandHandler))
             .disableCache(disabledCaches)
             .build();
 

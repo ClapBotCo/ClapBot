@@ -1,17 +1,22 @@
 package joecord.seal.clapbot.commands.message;
 
+import joecord.seal.clapbot.api.CommandProperty;
+import joecord.seal.clapbot.api.GenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class PingCommand extends AbstractMessageCommand {
+public class PingCommand extends GenericCommand<MessageReceivedEvent> {
     
     public PingCommand() {
-        this.name = "ping";
+        super(MessageReceivedEvent.class, CommandProperty.INVOKED);
+
+        this.displayName = "Ping";
         this.description = "Gets the bot's response time in milliseconds";
-        this.usage = this.name;
+        
+        super.setAliases("ping");
     }
 
     @Override
-    public void execute(MessageReceivedEvent event, String[] arguments) {
+    public void execute(MessageReceivedEvent event) {
         long initialTime = System.currentTimeMillis();
 
         event.getChannel().sendMessage("⏱")
