@@ -6,6 +6,9 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 public class LoggingCommand extends GenericCommand<MessageReceivedEvent> {
     public LoggingCommand() {
         super(MessageReceivedEvent.class);
+
+        this.displayName = "Logging";
+        this.description = "Logs MessageReceivedEvent details to System.out";
     }
 
     @Override

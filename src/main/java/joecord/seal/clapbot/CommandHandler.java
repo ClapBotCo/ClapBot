@@ -47,14 +47,21 @@ public class CommandHandler {
     public <T extends GenericEvent> boolean register(GenericCommand<T> command) {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(command.getEventClass());
+        boolean success;
 
         if(entry == null) {
             // First of it's kind to get registered
             entry = new Entry<T>(command.getEventClass());
             this.register.put(command.getEventClass(), entry);
+            System.out.println("+ [New] " + command.getDisplayName()); // TODO remove
         }
+        else System.out.println("+ " + command.getDisplayName()); // TODO remove
 
-        return entry.add(command);
+        success = entry.add(command);
+        
+        System.out.println(success + " - " + register.toString()); // TODO remove
+
+        return success;
     }
 
     /**
@@ -87,7 +94,7 @@ public class CommandHandler {
      * @param isBot If relevant, true iff any relevant user in the event is a
      * bot, or false if the event does not concern any users
      */
-    public <T extends Event> void onEvent(Class<T> eventClass, T event, 
+    public <T extends GenericEvent> void onEvent(Class<T> eventClass, T event, 
         String message, boolean isBot) {
 
         @SuppressWarnings("unchecked") // This cast should always work
@@ -95,7 +102,15 @@ public class CommandHandler {
 
         if(entry == null) {
             // No commands registered for this event
-            System.out.println("No commands registered");
+            if(register.containsKey(eventClass)) {
+                System.out.println("Event class " + eventClass.getSimpleName() + " maps to null");
+            }
+            else {
+                System.out.println(String.format(
+                    "No cmds registered. eventClass = %s, event = %s, message = %s, isBot = %s",
+                    eventClass.getSimpleName(), event.toString(), message, Boolean.toString(isBot)));
+            }
+            System.out.println(register.toString());
             return;
         }
 
@@ -174,7 +189,7 @@ public class CommandHandler {
      * in the entry use the same GenericEvent subclass as their event class.
      * @param <E> Generic type of the GenericEvent subclass for this entry
      */
-    private class Entry<E extends GenericEvent> {
+    public class Entry<E extends GenericEvent> {
         private HashSet<GenericCommand<E>> commands;
         private HashMap<String, GenericCommand<E>> invoked;
 
@@ -234,6 +249,24 @@ public class CommandHandler {
 
         public HashSet<GenericCommand<E>> getAll() {
             return this.commands;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder str = new StringBuilder(32);
+            str.append("[");
+            for(GenericCommand<E> cmd : this.commands) {
+                str.append(cmd.getDisplayName() + ", ");
+            }
+            for(String s : this.invoked.keySet()) {
+                str.append(this.invoked.get(s).getDisplayName() + ", ");
+            }
+            str.append("]");
+
+            Class<?> d = CommandHandler.class;
+            d.hashCode();
+
+            return str.toString();
         }
     }
 }

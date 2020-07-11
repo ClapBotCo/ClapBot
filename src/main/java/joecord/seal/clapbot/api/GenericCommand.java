@@ -132,7 +132,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * Returns true iff all given properties are contained in this command's
      * properties set.
      * 
-     * If no properties are specified the check is vacuously true.
+     * If no properties are specified then the check is vacuously true.
      * @param properties Zero or more properties to check
      * @return True iff the command has all given properties
      */
