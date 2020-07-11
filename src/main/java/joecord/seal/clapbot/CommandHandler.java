@@ -94,7 +94,7 @@ public class CommandHandler {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(eventClass);
 
-        if(entry == null) {
+        if(entry == null || entry.isEmpty()) {
             // No commands registered for this event
             return;
         }
@@ -247,6 +247,14 @@ public class CommandHandler {
          */
         public Set<GenericCommand<E>> getAll() {
             return this.commands;
+        }
+
+        /**
+         * Checks if there are no commands registered in this entry.
+         * @return True iff there are no registered commands for this entry
+         */
+        public boolean isEmpty() {
+            return this.commands.size == 0 && this.invoked.size == 0;
         }
 
         /* Rudimentary toString
