@@ -19,7 +19,11 @@ public abstract class GenericCommand<T extends GenericEvent> {
     protected String displayName = null;
     protected String description = null;
 
-    protected Class<T> eventClass = null;
+    /**
+     * The {@code Class<T extends GenericEvent>} that this command concerns.
+     * Must be set by the constructor.
+     */
+    protected Class<T> eventClass;
 
     /**
      * A set of the {@link joecord.seal.clapbot.api.CommandProperty 
@@ -103,19 +107,43 @@ public abstract class GenericCommand<T extends GenericEvent> {
     /**
      * Get the display name of the command to be shown to the user.
      * @return Name string
+     * @throws IllegalStateException If the name was never set
      */
     public String getDisplayName() {
+        if(this.displayName == null) {
+            throw new IllegalStateException("Display name never set");
+        }
         return this.displayName;
+    }
+
+    /**
+     * Gets the display name of the command to be shown to the user. Equivalent
+     * to {@link joecord.seal.clapbot.api.GenericCommand#getDisplayName()
+     * getDisplayName()}.
+     * @return Name string
+     * @throws IllegalStateException If the name was never set
+     */
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 
     /**
      * Get a string describing what the command does.
      * @return Description string
+     * @throws IllegalStateException If the description was never set
      */
     public String getDescription() {
+        if(this.description == null) {
+            throw new IllegalStateException("Description never set");
+        }
         return this.description;
     }
 
+    /**
+     * Get the {@code Class<T extends GenericEvent>} that this command concerns.
+     * @return Event class
+     */
     public Class<T> getEventClass() {
         return this.eventClass;
     }
@@ -148,19 +176,59 @@ public abstract class GenericCommand<T extends GenericEvent> {
 
     // Handle CommandProperty.INVOKED
 
-    final protected void setAliases(String... aliases) {
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#INVOKED
+     * INVOKED}.
+     * 
+     * Sets the command's aliases, the strings that can be used in
+     * conjunction with the command handler's prefix to invoke the command.
+     * @param alias The first alias of the command
+     * @param aliases Any additional aliases
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
+    final protected void setAliases(String alias, String... aliases) {
         assertProperty(CommandProperty.INVOKED);
 
-        this.aliases = new HashSet<>(Arrays.asList(aliases));
+        this.aliases = new HashSet<>();
+        this.aliases.add(alias);
+        this.aliases.addAll(Arrays.asList(aliases));
     }
 
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#INVOKED
+     * INVOKED}.
+     * 
+     * Sets the command's aliases, the strings that can be used in
+     * conjunction with the command handler's prefix to invoke the command.
+     * @param aliases Collection of the aliases of the command with non-zero
+     * size
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties OR if the given collection was of zero
+     * size
+     */
     final protected void setAliases(Collection<String> aliases) {
         assertProperty(CommandProperty.INVOKED);
+
+        if(aliases.size() == 0) {
+            throw new IllegalArgumentException(
+                "Given alias collection must be non-zero size");
+        }
 
         this.aliases = new HashSet<>(aliases);
     }
 
-    final public HashSet<String> getAliases() {
+    /**
+     * Gets the aliases of the command iff the command has the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#INVOKED INVOKED}.
+     * @return Set of strings of the aliases
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the command never set it's aliases
+     */
+    final public Set<String> getAliases() {
         assertProperty(CommandProperty.INVOKED);
 
         if(this.aliases == null) {
@@ -174,12 +242,33 @@ public abstract class GenericCommand<T extends GenericEvent> {
 
     // Handle CommandProprty.CONDITIONAL
 
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#CONDITIONAL
+     * CONDITIONAL}.
+     * 
+     * Sets the predicate condition of the command, the predicate takes in the
+     * event that the command concerns. Before executing, the command handler
+     * checks the condition and only executes the command if it returns true.
+     * @param condition The condition predicate
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties 
+     */
     final protected void setCondition(Predicate<T> condition) {
         assertProperty(CommandProperty.CONDITIONAL);
 
         this.condition = condition;
     }
 
+    /**
+     * Checks the command's condition predicate with the given event iff the 
+     * command has the property {@link 
+     * joecord.seal.clapbot.api.CommandProperty#CONDITIONAL CONDITIONAL}.
+     * @param event The event to check
+     * @return True iff the condition passes on this event
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final public boolean checkCondition(T event) {
         assertProperty(CommandProperty.CONDITIONAL);
 
@@ -192,6 +281,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
     
+    // TODO document from here
     final protected void setConditionDesc(String conditionDesc) {
         assertProperty(CommandProperty.CONDITIONAL);
 

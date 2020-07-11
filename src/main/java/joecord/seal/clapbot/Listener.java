@@ -1,7 +1,7 @@
 package joecord.seal.clapbot;
 
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
  * 
  * <h3>Supported Events</h3>
  * <p><ul>
- * <li>GuildMessageReceivedEvent
+ * <li>MessageReceivedEvent
  * <li>GuildMemberJoinEvent
  * <li>GuildMessageReactionAddEvent
  * </ul><p>
@@ -26,9 +26,9 @@ public class Listener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
+    public void onMessageReceived(MessageReceivedEvent event) {
         this.commandHandler.onEvent(
-            GuildMessageReceivedEvent.class,
+            MessageReceivedEvent.class,
             event,
             event.getMessage().getContentRaw(),
             event.getAuthor().isBot()

@@ -47,21 +47,14 @@ public class CommandHandler {
     public <T extends GenericEvent> boolean register(GenericCommand<T> command) {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(command.getEventClass());
-        boolean success;
 
         if(entry == null) {
             // First of it's kind to get registered
             entry = new Entry<T>(command.getEventClass());
             this.register.put(command.getEventClass(), entry);
-            System.out.println("+ [New] " + command.getDisplayName()); // TODO remove
         }
-        else System.out.println("+ " + command.getDisplayName()); // TODO remove
 
-        success = entry.add(command);
-        
-        System.out.println(success + " - " + register.toString()); // TODO remove
-
-        return success;
+        return entry.add(command);
     }
 
     /**
@@ -86,6 +79,7 @@ public class CommandHandler {
      * Contains the logic for running commands when a supported JDA event
      * occurs. Contains all logic for handling {@link
      * joecord.seal.clapbot.api.CommandProperty CommandPropertys}.
+     * 
      * @param <T> Generic type of the event being handled
      * @param eventClass The {@link java.lang.Class} of the event
      * @param event The JDA event that occured
@@ -102,19 +96,11 @@ public class CommandHandler {
 
         if(entry == null) {
             // No commands registered for this event
-            if(register.containsKey(eventClass)) {
-                System.out.println("Event class " + eventClass.getSimpleName() + " maps to null");
-            }
-            else {
-                System.out.println(String.format(
-                    "No cmds registered. eventClass = %s, event = %s, message = %s, isBot = %s",
-                    eventClass.getSimpleName(), event.toString(), message, Boolean.toString(isBot)));
-            }
-            System.out.println(register.toString());
             return;
         }
 
-        HashSet<GenericCommand<T>> cmdSet = entry.getAll();
+        // Set of commands to iterate over
+        Set<GenericCommand<T>> cmdSet = entry.getAll();
 
         // Handle CommandProperty.INVOKED
         if(message != null && message.trim().startsWith(this.prefix)) {
@@ -123,6 +109,8 @@ public class CommandHandler {
             GenericCommand<T> invokedCmd = entry.getInvoked(parts[0]);
 
             if(invokedCmd != null) {
+                // If we found a new command, add it to the set by making a copy
+                // of the set and adding it.
                 cmdSet = new HashSet<GenericCommand<T>>(cmdSet);
                 cmdSet.add(invokedCmd);
 
@@ -162,6 +150,7 @@ public class CommandHandler {
 
             // Handle CommandProperty.META
             if(cmd.hasProperties(CommandProperty.META)) {
+                // Give the command the command handler that it needs
                 cmd.setCommandHandler(this);
             }
 
@@ -169,6 +158,11 @@ public class CommandHandler {
         }
     }
     
+    /**
+     * Get the configured prefix. The prefix is the string used before a
+     * command alias for all commands with the invoked property.
+     * @return Prefix string
+     */
     public String getPrefix() {
         return this.prefix;
     }
@@ -247,10 +241,15 @@ public class CommandHandler {
             return invoked.get(alias);
         }
 
-        public HashSet<GenericCommand<E>> getAll() {
+        /**
+         * Gets all registered non-invoked commands.
+         * @return Set of commands
+         */
+        public Set<GenericCommand<E>> getAll() {
             return this.commands;
         }
 
+        /* Rudimentary toString
         @Override
         public String toString() {
             StringBuilder str = new StringBuilder(32);
@@ -267,6 +266,6 @@ public class CommandHandler {
             d.hashCode();
 
             return str.toString();
-        }
+        } */
     }
 }
