@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.GenericEvent;
 /**
  * Used to create a command
  */
-public abstract class GenericCommand<T extends GenericEvent> {
+public abstract class GenericCommand<E extends GenericEvent> {
 
     /* Fields --------------------------------------------------------------- */
 
@@ -25,7 +25,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * The {@code Class<T extends GenericEvent>} that this command concerns.
      * Must be set by the constructor.
      */
-    protected Class<T> eventClass;
+    protected Class<E> eventClass;
 
     /**
      * A set of the {@link joecord.seal.clapbot.api.CommandProperty 
@@ -47,7 +47,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * the command uses that returns true iff the condition passes, i.e., the
      * command should be triggered.
      */
-    private Predicate<T> condition = null;
+    private Predicate<E> condition = null;
     private String conditionDesc = null;
     /**
      * For commands with the CommandProperty {@link 
@@ -56,7 +56,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * the command uses that returns true iff the users are privelaged, i.e.,
      * the command should be triggered.
      */
-    private Predicate<T> privelage = null;
+    private Predicate<E> privelage = null;
     private String privelageDesc = null;
     /**
      * For commands with the CommandProperty {@link 
@@ -85,7 +85,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @throws IllegalArgumentException If the registered command properties
      * are illegal
      */
-    public GenericCommand(Class<T> eventClass, CommandProperty... properties) {
+    public GenericCommand(Class<E> eventClass, CommandProperty... properties) {
         this.eventClass = eventClass;
         this.properties.addAll(Arrays.asList(properties));
 
@@ -101,7 +101,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @throws IllegalArgumentException If the registered command properties
      * are illegal
      */
-    public GenericCommand(Class<T> eventClass,
+    public GenericCommand(Class<E> eventClass,
         Collection<CommandProperty> properties) {
 
         this.eventClass = eventClass;
@@ -116,7 +116,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * Called when a command should be executed on an event.
      * @param event The JDA Event to work with
      */
-    public abstract void execute(T event);
+    public abstract void execute(E event);
 
     /* Getters -------------------------------------------------------------- */
 
@@ -160,7 +160,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * Get the {@code Class<T extends GenericEvent>} that this command concerns.
      * @return Event class
      */
-    public Class<T> getEventClass() {
+    public Class<E> getEventClass() {
         return this.eventClass;
     }
 
@@ -270,7 +270,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties 
      */
-    final protected void setCondition(Predicate<T> condition) {
+    final protected void setCondition(Predicate<E> condition) {
         assertProperty(CommandProperty.CONDITIONAL);
 
         this.condition = condition;
@@ -285,7 +285,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties
      */
-    final public boolean checkCondition(T event) {
+    final public boolean checkCondition(E event) {
         assertProperty(CommandProperty.CONDITIONAL);
 
         if(this.condition == null) {
@@ -350,7 +350,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties 
      */
-    final protected void setPrivelage(Predicate<T> privelage) {
+    final protected void setPrivelage(Predicate<E> privelage) {
         assertProperty(CommandProperty.PRIVELAGED);
 
         this.privelage = privelage;
@@ -366,7 +366,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * without the required properties
      * @throws IllegalStateException If the command never set it's privelage
      */
-    final public boolean checkPrivelage(T event) {
+    final public boolean checkPrivelage(E event) {
         assertProperty(CommandProperty.PRIVELAGED);
 
         if(this.privelage == null) {
