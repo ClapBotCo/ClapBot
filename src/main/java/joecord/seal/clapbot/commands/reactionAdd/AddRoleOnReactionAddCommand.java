@@ -17,8 +17,6 @@ public class AddRoleOnReactionAddCommand extends
     private String emoteName;
     /** The ISnowflake ID of the role that this command will give */
     private String roleId;
-    /** The JDA role resolved from the role ID */
-    private Role role;
     /** True if the reaction emote is an emoji, otherwise false if it is a
      * custom emote */
     private boolean isEmoji;
@@ -44,7 +42,6 @@ public class AddRoleOnReactionAddCommand extends
         this.messageId = messageId;
         this.emoteName = emoteName;
         this.roleId = roleId;
-        this.role = null;
         this.isEmoji = emoteName.startsWith("U+");
 
         super.setConditionDesc("Only activates on message ID " +
@@ -55,12 +52,9 @@ public class AddRoleOnReactionAddCommand extends
 
     @Override
     public void execute(GuildMessageReactionAddEvent event) {
-        if(this.role == null) {
-            this.role = event.getGuild().getRoleById(this.roleId);
-        }
+        Role role = event.getGuild().getRoleById(this.roleId);
 
-        event.getGuild().addRoleToMember(event.getUserId(), this.role)
-            .queue();
+        event.getGuild().addRoleToMember(event.getUserId(), role).queue();
     }
 
     @Override
