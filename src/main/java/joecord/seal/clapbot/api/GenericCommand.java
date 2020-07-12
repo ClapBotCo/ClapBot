@@ -121,23 +121,19 @@ public abstract class GenericCommand<E extends GenericEvent> {
     /* Getters -------------------------------------------------------------- */
 
     /**
-     * Get the display name of the command to be shown to the user.
+     * Get the display name of the command to be shown to the user. If not set,
+     * this will return null.
      * @return Name string
-     * @throws IllegalStateException If the name was never set
      */
     public String getDisplayName() {
-        if(this.displayName == null) {
-            throw new IllegalStateException("Display name never set");
-        }
         return this.displayName;
     }
 
     /**
      * Gets the display name of the command to be shown to the user. Equivalent
      * to {@link joecord.seal.clapbot.api.GenericCommand#getDisplayName()
-     * getDisplayName()}.
+     * getDisplayName()}. If not set, this will return null.
      * @return Name string
-     * @throws IllegalStateException If the name was never set
      */
     @Override
     public String toString() {
@@ -145,14 +141,11 @@ public abstract class GenericCommand<E extends GenericEvent> {
     }
 
     /**
-     * Get a string describing what the command does.
+     * Get a string describing what the command does. If not set, this will
+     * return null.
      * @return Description string
-     * @throws IllegalStateException If the description was never set
      */
     public String getDescription() {
-        if(this.description == null) {
-            throw new IllegalStateException("Description never set");
-        }
         return this.description;
     }
 
@@ -298,8 +291,8 @@ public abstract class GenericCommand<E extends GenericEvent> {
     }
     
     /**
-     * Must be called by the command at construction time iff the command has
-     * the property {@link joecord.seal.clapbot.api.CommandProperty#CONDITIONAL
+     * Optionally called by commands with the property {@link 
+     * joecord.seal.clapbot.api.CommandProperty#CONDITIONAL
      * CONDITIONAL}.
      * 
      * Sets a string to describe the requirements that events must meet to
@@ -318,22 +311,15 @@ public abstract class GenericCommand<E extends GenericEvent> {
      * Gets the description string of the command's condition iff the command
      * has the property {@link
      * joecord.seal.clapbot.api.CommandProperty#CONDITIONAL CONDITIONAL}.
+     * If the condition description was never set, this will return null.
      * @return Description string of the condition
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties
-     * @throws IllegalStateException If the command never set it's condition
-     * description string
      */
     final public String getConditionDesc() {
         assertProperty(CommandProperty.CONDITIONAL);
 
-        if(this.conditionDesc == null) {
-            throw new IllegalStateException(
-                "Conditional command never set condition description");
-        }
-        else {
-            return this.conditionDesc;
-        }
+        return this.conditionDesc;
     }
 
     /* Handle CommandProprty.PRIVELAGED ------------------------------------- */
@@ -379,9 +365,8 @@ public abstract class GenericCommand<E extends GenericEvent> {
     }
 
     /**
-     * Must be called by the command at construction time iff the command has
-     * the property {@link joecord.seal.clapbot.api.CommandProperty#PRIVELAGED
-     * PRIVELAGED}.
+     * Optionally called by commands with the property {@link 
+     * joecord.seal.clapbot.api.CommandProperty#PRIVELAGED PRIVELAGED}.
      * 
      * Sets a string to describe the requirements that events must meet to
      * pass the privelage check.
@@ -399,22 +384,15 @@ public abstract class GenericCommand<E extends GenericEvent> {
      * Gets the description string of the command's condition iff the command
      * has the property {@link
      * joecord.seal.clapbot.api.CommandProperty#PRIVELAGED PRIVELAGED}.
+     * If the privelage description was never set, this will return null.
      * @return Description string of the privelage check
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties
-     * @throws IllegalStateException If the command never set it's privelage
-     * description string
      */
     final public String getPrivelageDesc() {
         assertProperty(CommandProperty.PRIVELAGED);
 
-        if(this.privelageDesc == null) {
-            throw new IllegalStateException(
-                "Privelaged command never set privelage description");
-        }
-        else {
-            return this.privelageDesc;
-        }
+        return this.privelageDesc;
     }
 
     /* Handle CommandProprty.META ------------------------------------------- */
@@ -516,8 +494,7 @@ public abstract class GenericCommand<E extends GenericEvent> {
     }
 
     /**
-     * Must be called by the command at construction time iff the command has
-     * the property {@link
+     * Optionally called by commands with the property {@link
      * joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS USES_ARGUMENTS}.
      * 
      * Sets a string to describe the usage syntax of the command to show what
@@ -535,26 +512,19 @@ public abstract class GenericCommand<E extends GenericEvent> {
     /**
      * Gets the arguments description string iff the command has the property 
      * {@link joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS
-     * USES_ARGUMENTS}.
+     * USES_ARGUMENTS}. If the arguments description was never set, this will
+     * return null.
      * 
      * The string describes the usage syntax of the command to show what
      * arguments are required. For example {@code echo <message to send>}.
      * @return Arguments usage syntax description string
      * @throws IllegalArgumentException If this method was called on a command
      * without the required properties
-     * @throws IllegalStateException If the command never set it's arguments
-     * description
      */
     final public String getArgumentsDesc() {
         assertProperty(CommandProperty.USES_ARGUMENTS);
 
-        if(this.argumentsDesc == null) {
-            throw new IllegalStateException(
-                "Uses-Arguments command never set arguments description");
-        }
-        else {
-            return this.argumentsDesc;
-        }
+        return this.argumentsDesc;
     }
 
     /* Private convenience method ------------------------------------------- */
