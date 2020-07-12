@@ -1,5 +1,8 @@
 package joecord.seal.clapbot.api;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 public enum CommandProperty {
 
     /**
@@ -84,5 +87,37 @@ public enum CommandProperty {
         }
 
         return String.join("-", display);
+    }
+
+    public static void assertLegality(CommandProperty... properties) {
+        assertLegality(Arrays.asList(properties));
+    }
+
+    public static void assertLegality(Collection<CommandProperty> properties) {
+        for(CommandProperty prop : properties) {
+            switch(prop) {
+                case USES_ARGUMENTS: {
+                    // Requires INVOKED
+                    if(!properties.contains(CommandProperty.INVOKED)) {
+                        throw new IllegalArgumentException(
+                            "Illegal CommandPropertys, cannot have " + 
+                            "Uses-Arguments without Invoked");
+                    }
+                    break;
+                }
+                case CONDITIONAL:
+                    break;
+                case INVOKED:
+                    break;
+                case META:
+                    break;
+                case PRIVELAGED:
+                    break;
+                case RESPECT_BOTS:
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
