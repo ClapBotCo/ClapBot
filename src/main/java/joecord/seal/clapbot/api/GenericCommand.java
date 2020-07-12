@@ -16,6 +16,8 @@ import net.dv8tion.jda.api.events.GenericEvent;
  */
 public abstract class GenericCommand<T extends GenericEvent> {
 
+    /* Fields --------------------------------------------------------------- */
+
     protected String displayName = null;
     protected String description = null;
 
@@ -72,16 +74,22 @@ public abstract class GenericCommand<T extends GenericEvent> {
     private String[] arguments = null;
     private String argumentsDesc = null;
 
+    /* Constructors --------------------------------------------------------- */
+
     /**
      * Construct a new GenericCommand with the given event class and registered
      * command properties.
      * @param eventClass The subclass of GenericEvent that this command
      * responds to
      * @param properties Zero or more CommandPropertys to register
+     * @throws IllegalArgumentException If the registered command properties
+     * are illegal
      */
     public GenericCommand(Class<T> eventClass, CommandProperty... properties) {
         this.eventClass = eventClass;
         this.properties.addAll(Arrays.asList(properties));
+
+        CommandProperty.assertLegality(properties);
     }
 
     /**
@@ -90,19 +98,27 @@ public abstract class GenericCommand<T extends GenericEvent> {
      * @param eventClass The subclass of GenericEvent that this command
      * responds to
      * @param properties A collection of CommandPropertys to register
+     * @throws IllegalArgumentException If the registered command properties
+     * are illegal
      */
     public GenericCommand(Class<T> eventClass,
         Collection<CommandProperty> properties) {
 
         this.eventClass = eventClass;
         this.properties.addAll(properties);
+
+        CommandProperty.assertLegality(properties);
     }
+
+    /* Abstract execute method ---------------------------------------------- */
 
     /**
      * Called when a command should be executed on an event.
      * @param event The JDA Event to work with
      */
     public abstract void execute(T event);
+
+    /* Getters -------------------------------------------------------------- */
 
     /**
      * Get the display name of the command to be shown to the user.
@@ -174,7 +190,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
         return true;
     }
 
-    // Handle CommandProperty.INVOKED
+    /* Handle CommandProperty.INVOKED --------------------------------------- */
 
     /**
      * Must be called by the command at construction time iff the command has
@@ -240,7 +256,7 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
-    // Handle CommandProprty.CONDITIONAL
+    /* Handle CommandProprty.CONDITIONAL ------------------------------------ */
 
     /**
      * Must be called by the command at construction time iff the command has
@@ -281,13 +297,33 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
     
-    // TODO document from here
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#CONDITIONAL
+     * CONDITIONAL}.
+     * 
+     * Sets a string to describe the requirements that events must meet to
+     * pass the condition.
+     * @param conditionDesc Condition description string
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final protected void setConditionDesc(String conditionDesc) {
         assertProperty(CommandProperty.CONDITIONAL);
 
         this.conditionDesc = conditionDesc;
     }
 
+    /**
+     * Gets the description string of the command's condition iff the command
+     * has the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#CONDITIONAL CONDITIONAL}.
+     * @return Description string of the condition
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the command never set it's condition
+     * description string
+     */
     final public String getConditionDesc() {
         assertProperty(CommandProperty.CONDITIONAL);
 
@@ -300,14 +336,36 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
-    // Handle CommandProprty.PRIVELAGED
+    /* Handle CommandProprty.PRIVELAGED ------------------------------------- */
 
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#PRIVELAGED
+     * PRIVELAGED}.
+     * 
+     * Sets the privelage predicate of the command, the predicate takes in the
+     * event that the command concerns. Before executing, the command handler
+     * checks the privelage and only executes the command if it returns true.
+     * @param privelage The privelage predicate
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties 
+     */
     final protected void setPrivelage(Predicate<T> privelage) {
         assertProperty(CommandProperty.PRIVELAGED);
 
         this.privelage = privelage;
     }
 
+    /**
+     * Checks the command's privelage predicate with the given event iff the 
+     * command has the property {@link 
+     * joecord.seal.clapbot.api.CommandProperty#PRIVELAGED PRIVELAGED}.
+     * @param event The event to check
+     * @return True iff the privelage passes on this event
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the command never set it's privelage
+     */
     final public boolean checkPrivelage(T event) {
         assertProperty(CommandProperty.PRIVELAGED);
 
@@ -320,12 +378,33 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link joecord.seal.clapbot.api.CommandProperty#PRIVELAGED
+     * PRIVELAGED}.
+     * 
+     * Sets a string to describe the requirements that events must meet to
+     * pass the privelage check.
+     * @param privelageDesc Privelage description string
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final protected void setPrivelageDesc(String privelageDesc) {
         assertProperty(CommandProperty.PRIVELAGED);
 
         this.privelageDesc = privelageDesc;
     }
 
+    /**
+     * Gets the description string of the command's condition iff the command
+     * has the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#PRIVELAGED PRIVELAGED}.
+     * @return Description string of the privelage check
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the command never set it's privelage
+     * description string
+     */
     final public String getPrivelageDesc() {
         assertProperty(CommandProperty.PRIVELAGED);
 
@@ -338,14 +417,32 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
-    // Handle CommandProprty.META
+    /* Handle CommandProprty.META ------------------------------------------- */
 
+    /**
+     * Gives the command access to the {@link 
+     * joecord.seal.clapbot.api.CommandHandler CommandHandler} iff the command
+     * has the property {@link joecord.seal.clapbot.api.CommandProperty#META 
+     * META}.
+     * @param handler The command handler
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final public void setCommandHandler(CommandHandler handler) {
         assertProperty(CommandProperty.META);
 
         this.handler = handler;
     }
 
+    /**
+     * Gets the previosuly set {@link 
+     * joecord.seal.clapbot.api.CommandHandler CommandHandler} iff the command
+     * has the property {@link joecord.seal.clapbot.api.CommandProperty#META 
+     * META}.
+     * @return The command handler
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final protected CommandHandler getCommandHandler() {
         assertProperty(CommandProperty.META);
 
@@ -358,14 +455,42 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
-    // Handle CommandProperty.USES_ARGUMENTS
+    /**
+     * Clears the {@link joecord.seal.clapbot.api.CommandHandler
+     * CommandHandler} for use after a command has been executed for commands
+     * with {@link joecord.seal.clapbot.api.CommandProperty#META 
+     * META}.
+     * 
+     * This command does NOT fail when called on a command without this
+     * property.
+     */
+    final public void clearCommandHandler() {
+        this.handler = null;
+    }
 
+    /* Handle CommandProperty.USES_ARGUMENTS -------------------------------- */
+
+    /**
+     * Sets the command's arguments iff the command has the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS USES_ARGUMENTS}.
+     * @param arguments The arguments to give
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final public void setArguments(String[] arguments) {
         assertProperty(CommandProperty.USES_ARGUMENTS);
 
         this.arguments = arguments;
     }
 
+    /**
+     * Gets the previosuly set arguments iff the command has the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS USES_ARGUMENTS}.
+     * @return The arguments
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the arguments were never set
+     */
     final protected String[] getArguments() {
         assertProperty(CommandProperty.USES_ARGUMENTS);
 
@@ -379,12 +504,47 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
+    /**
+     * Clears the command's arguments for use after the command has been
+     * executed for commands with the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS USES_ARGUMENTS}.
+     * 
+     * This command does NOT fail on commands without this property.
+     */
+    final public void clearArguments() {
+        this.arguments = null;
+    }
+
+    /**
+     * Must be called by the command at construction time iff the command has
+     * the property {@link
+     * joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS USES_ARGUMENTS}.
+     * 
+     * Sets a string to describe the usage syntax of the command to show what
+     * arguments are required. For example {@code echo <message to send>}.
+     * @param argumentsDesc Arguments usage syntax description string
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     */
     final protected void setArgumentsDesc(String argumentsDesc) {
         assertProperty(CommandProperty.USES_ARGUMENTS);
 
         this.argumentsDesc = argumentsDesc;
     }
 
+    /**
+     * Gets the arguments description string iff the command has the property 
+     * {@link joecord.seal.clapbot.api.CommandProperty#USES_ARGUMENTS
+     * USES_ARGUMENTS}.
+     * 
+     * The string describes the usage syntax of the command to show what
+     * arguments are required. For example {@code echo <message to send>}.
+     * @return Arguments usage syntax description string
+     * @throws IllegalArgumentException If this method was called on a command
+     * without the required properties
+     * @throws IllegalStateException If the command never set it's arguments
+     * description
+     */
     final public String getArgumentsDesc() {
         assertProperty(CommandProperty.USES_ARGUMENTS);
 
@@ -397,14 +557,16 @@ public abstract class GenericCommand<T extends GenericEvent> {
         }
     }
 
-    // Private convenience method
+    /* Private convenience method ------------------------------------------- */
 
-    private void assertProperty(CommandProperty property) {
-        if(!this.properties.contains(property)) {
-            throw new IllegalArgumentException(
-                "Cannot perform " + property.toString() + 
+    private void assertProperty(CommandProperty... assertProps) {
+        for(CommandProperty prop : assertProps) {
+            if(!hasProperties(prop)) {
+                throw new IllegalArgumentException(
+                "Cannot perform " + prop.toString() + 
                 " operation without declaring command property for command " +
                 this.displayName + ".");
+            }
         }
     }
 }

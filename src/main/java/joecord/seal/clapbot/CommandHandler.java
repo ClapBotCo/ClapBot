@@ -14,6 +14,8 @@ import joecord.seal.clapbot.api.GenericCommand;
 
 public class CommandHandler {
 
+    /* Fields --------------------------------------------------------------- */
+
     /**
      * The string used before a command alias for all commands with the
      * {@link joecord.seal.clapbot.api.CommandProperty#INVOKED invoked}
@@ -25,7 +27,9 @@ public class CommandHandler {
      * net.dv8tion.jda.api.events.GenericEvent JDA GenericEvent} to {@link 
      * joecord.seal.clapbot.CommandHandler.Entry Entrys} of that same class.
      */
-    private HashMap<Class<? extends GenericEvent>, Entry<?>> register;    
+    private HashMap<Class<? extends GenericEvent>, Entry<?>> register;  
+    
+    /* Constructor ---------------------------------------------------------- */
 
     /**
      * Construct a new command handler.
@@ -37,6 +41,8 @@ public class CommandHandler {
         this.prefix = prefix;
         this.register = new HashMap<>();
     }
+
+    /* Registration --------------------------------------------------------- */
 
     /**
      * Register a GenericCommand.
@@ -67,13 +73,23 @@ public class CommandHandler {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(command.getEventClass());
 
+        boolean success;
+
         if(entry == null) {
             // No commands registered at this event class
             return false;
         }
 
-        return entry.remove(command);
-    } 
+        success = entry.remove(command);
+
+        if(entry.isEmpty()) {
+            this.register.remove(command.getEventClass());
+        }
+
+        return success;
+    }
+
+    /* Event Handler -------------------------------------------------------- */
 
     /**
      * Contains the logic for running commands when a supported JDA event
@@ -94,7 +110,7 @@ public class CommandHandler {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(eventClass);
 
-        if(entry == null || entry.isEmpty()) {
+        if(entry == null) {
             // No commands registered for this event
             return;
         }
@@ -132,6 +148,12 @@ public class CommandHandler {
                 continue;
             }
 
+            // Handle CommandProperty.META
+            if(cmd.hasProperties(CommandProperty.META)) {
+                // Give the command the command handler that it needs
+                cmd.setCommandHandler(this);
+            }
+
             // Handle CommandProperty.PRIVELAGED
             if(cmd.hasProperties(CommandProperty.PRIVELAGED)) {
                 if(!cmd.checkPrivelage(event)) {
@@ -148,15 +170,16 @@ public class CommandHandler {
                 }
             }
 
-            // Handle CommandProperty.META
-            if(cmd.hasProperties(CommandProperty.META)) {
-                // Give the command the command handler that it needs
-                cmd.setCommandHandler(this);
-            }
-
+            // Execute
             cmd.execute(event);
+
+            // Clear any given temporary fields
+            cmd.clearArguments();
+            cmd.clearCommandHandler();
         }
     }
+
+    /* Getters -------------------------------------------------------------- */
     
     /**
      * Get the configured prefix. The prefix is the string used before a
@@ -176,6 +199,8 @@ public class CommandHandler {
         return GatewayIntent.fromEvents(this.register.keySet());
     }
 
+    /* Entry Inner Class Data Structure ------------------------------------- */
+
     /**
      * A collection of registered commands, each Entry corresponds to a
      * specific subclass of {@link
@@ -187,11 +212,23 @@ public class CommandHandler {
         private HashSet<GenericCommand<E>> commands;
         private HashMap<String, GenericCommand<E>> invoked;
 
+        /**
+         * Construct a new Entry by initialising fields.
+         * 
+         * The given class is not stored, just used to determine the new
+         * Entry's generic type {@code <E>}.
+         * @param eventClass The class of this entry's generic type
+         */
         public Entry(Class<E> eventClass) {
             this.commands = new HashSet<>();
             this.invoked = new HashMap<>();
         }
 
+        /**
+         * Add a new command to the entry.
+         * @param command GenericCommand to add
+         * @return True iff te command was not already registered
+         */
         public boolean add(GenericCommand<E> command) {
             boolean success = true;
             if(command.hasProperties(CommandProperty.INVOKED)) {
@@ -212,6 +249,11 @@ public class CommandHandler {
             return success;
         }
 
+        /**
+         * Remove a command from the entry.
+         * @param command GenericCommand to remove
+         * @return True iff the command previously registered
+         */
         public boolean remove(GenericCommand<E> command) {
             boolean success = true;
             if(command.hasProperties(CommandProperty.INVOKED)) {
@@ -254,7 +296,7 @@ public class CommandHandler {
          * @return True iff there are no registered commands for this entry
          */
         public boolean isEmpty() {
-            return this.commands.size == 0 && this.invoked.size == 0;
+            return this.commands.size() == 0 && this.invoked.size() == 0;
         }
 
         /* Rudimentary toString
