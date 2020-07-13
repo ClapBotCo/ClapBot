@@ -26,51 +26,49 @@ public class ClapBot {
 
     private CommandHandler commandHandler;
     private String token;
-    private JDA api;
+    private JDA api;    
 
-    public ClapBot(String token){
+    public ClapBot() {
+        this(System.getenv("DISCORD_CLAPBOT_TOKEN"));
+    }
+
+    public ClapBot(String token) {
         instance = this;
         this.token = token;
-        System.out.println(token);
-        //JoeCord :joeclap: is <:joeclap:551531713487175682>
-        this.commandHandler = new CommandHandler("clap ");
+        this.commandHandler = buildCommandHandler("clap ");
+        this.api = buildAPI();
+    }
+
+    private CommandHandler buildCommandHandler(String prefix) {
+        CommandHandler handler = new CommandHandler(prefix);
 
         // Register message commands
-        this.commandHandler.register(new EchoCommand());
-        this.commandHandler.register(new PingCommand());
+        handler.register(new PingCommand());
+        handler.register(new EchoCommand());
 
         // Register conditional commands
-        this.commandHandler.register(new MessageLoggerCommand(System.out));
-        this.commandHandler.register(new BanShadowCommand());
-        this.commandHandler.register(new GnEmanCommand());
-        this.commandHandler.register(new NotACultCommand());
-        this.commandHandler.register(new NerdDetectedCommand());
+        handler.register(new BanShadowCommand());
+        handler.register(new MessageLoggerCommand(System.out));
+        handler.register(new GnEmanCommand());
+        handler.register(new NotACultCommand());
+        handler.register(new NerdDetectedCommand());
 
         // Register member join commands
-        this.commandHandler.register(new JoinMessageCommand("727104182787506187"));
+        handler.register(new JoinMessageCommand("727104182787506187"));
             // Channel ID of #spam-claps in Bits and Bots
         
         // Register reaction add commands
-        this.commandHandler.register(new AddRoleOnReactionAddCommand(
+        handler.register(new AddRoleOnReactionAddCommand(
             "728136956646522920", // Some random message ID in #spam-claps
             "U+1f973", // :partying_face:
             "728136332202999849")); // The @PeasantClaps role ID
         
-        try {
-            this.api = buildAPI();
-        } catch (LoginException | InterruptedException e) {
-            System.out.println("Error creating bot API");
-            e.printStackTrace();
-            System.exit(0);
-        }
+        return handler;
     }
 
-    public ClapBot(){
-        this(System.getenv("DISCORD_CLAPBOT_TOKEN"));
-    }
-
-    public JDA buildAPI() throws LoginException, InterruptedException {
-        JDA api;
+    private JDA buildAPI() {
+        JDABuilder builder;
+        JDA api = null;
         List<CacheFlag> disabledCaches = Arrays.asList(
             CacheFlag.ACTIVITY,
             CacheFlag.CLIENT_STATUS,
@@ -78,18 +76,34 @@ public class ClapBot {
             CacheFlag.EMOTE
         );
 
-        api = JDABuilder.create(this.token, commandHandler.getRequiredIntents())
+        builder = JDABuilder.create(this.token, commandHandler.getRequiredIntents())
             .setActivity(Activity.playing("Starting up..."))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
             .addEventListeners(new Listener(this.commandHandler))
-            .disableCache(disabledCaches)
-            .build();
+            .disableCache(disabledCaches);
 
-        // Wait for the bot to finish starting up
-        api.awaitReady();
+        try {
+            api = builder.build();
+        }
+        catch(LoginException e) {
+            System.out.println("[ClapBot Error] Error logging in to discord:");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-        api.getPresence()
-            .setPresence(OnlineStatus.ONLINE, Activity.playing("TTT"));
+        try{
+            // Wait for the bot to finish starting up
+            api.awaitReady();
+        }
+        catch(InterruptedException e) {
+            System.out.println("[ClapBot Error] JDA was interrupted while " + 
+                "starting up:");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        api.getPresence().setPresence(
+            OnlineStatus.ONLINE, Activity.playing("TTT"));
 
         return api;
     }
