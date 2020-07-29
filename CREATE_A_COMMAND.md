@@ -177,32 +177,32 @@ public class NotACult extends GenericCommand<MessageReceievedEvent> {
 }
 ```
 
-### PRIVELAGED
+### PRIVILEGED
 
 This is functionally identical to CONDITIONAL, it is just an extra check that
 is done before the condition check and is conventionally used to check the user
 that the event concerns.
 
 Commands with this property must set their privelage check at construction time
-with `setPrivelage()`, which takes in a predicate that takes in the event, see
+with `setPrivilege()`, which takes in a predicate that takes in the event, see
 CONDITIONAL for more details. These commands can also optionally call
-`setPrivelageDesc()` at construction time to set a string describing the check.
+`setPrivilegeDesc()` at construction time to set a string describing the check.
 
 Eg.
 
 ```java
-public class PrivelageExample extends GenericCommand<MessageReceievedEvent> {
-    public PrivelageExample() {
-        super(MessageReceievedEvent.class, CommandPropery.PRIVELAGED);
+public class PrivilegeExample extends GenericCommand<MessageReceievedEvent> {
+    public PrivilegeExample() {
+        super(MessageReceievedEvent.class, CommandPropery.PRIVILEGED);
 
         // Using a local method with the check logic
-        super.setPrivelage(event -> privatePrivelageCheck(event));
+        super.setPrivilege(event -> privatePrivelageCheck(event));
 
         // Using normal predicate syntax
-        super.setPrivelage(event -> event.getAuthor().getIdLong() == 297978513250713602l);
+        super.setPrivilege(event -> event.getAuthor().getIdLong() == 297978513250713602l);
 
         // Optional
-        super.setPrivelageDesc("Checks if the message is sent by alec");
+        super.setPrivilegeDesc("Checks if the message is sent by alec");
      }
 
     @Override
@@ -211,8 +211,8 @@ public class PrivelageExample extends GenericCommand<MessageReceievedEvent> {
         event.getChannel().sendMessage("Hi alec").queue();
     }
 
-    // Contains the privelage check logic if you prefer
-    private boolean privatePrivelageCheck(MessageReceivedEvent event) {
+    // Contains the privilege check logic if you prefer
+    private boolean privatePrivilegeCheck(MessageReceivedEvent event) {
         return event.getAuthor().getIdLong() == 297978513250713602l;
     }
 }
