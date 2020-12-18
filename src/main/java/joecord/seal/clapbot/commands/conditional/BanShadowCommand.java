@@ -2,14 +2,14 @@ package joecord.seal.clapbot.commands.conditional;
 
 import java.util.regex.Pattern;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class BanShadowCommand extends GenericCommand<MessageReceivedEvent> {
+public class BanShadowCommand extends LegacyGenericCommand<MessageReceivedEvent> {
 
     public BanShadowCommand() {
-        super(MessageReceivedEvent.class, CommandProperty.CONDITIONAL);
+        super(MessageReceivedEvent.class, LegacyCommandProperty.CONDITIONAL);
 
         this.displayName = "Ban Shadow";
         this.description = 

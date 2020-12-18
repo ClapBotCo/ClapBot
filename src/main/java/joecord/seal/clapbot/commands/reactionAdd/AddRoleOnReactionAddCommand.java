@@ -1,13 +1,13 @@
 package joecord.seal.clapbot.commands.reactionAdd;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.MessageReaction.ReactionEmote;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
 public class AddRoleOnReactionAddCommand extends 
-    GenericCommand<GuildMessageReactionAddEvent> {
+    LegacyGenericCommand<GuildMessageReactionAddEvent> {
 
     /** The ISnowflake ID of the message that this command watches reactions of
     */
@@ -34,7 +34,7 @@ public class AddRoleOnReactionAddCommand extends
     public AddRoleOnReactionAddCommand(String messageId, String emoteName,
         String roleId) {
 
-        super(GuildMessageReactionAddEvent.class, CommandProperty.CONDITIONAL);
+        super(GuildMessageReactionAddEvent.class, LegacyCommandProperty.CONDITIONAL);
         
         this.displayName = "Add role on reaction add";
         this.description = "Gives a user that reacts to a specific message " +

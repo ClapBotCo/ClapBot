@@ -2,15 +2,15 @@ package joecord.seal.clapbot.commands.conditional;
 
 import java.io.PrintStream;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class MessageLoggerCommand extends GenericCommand<MessageReceivedEvent> {
+public class MessageLoggerCommand extends LegacyGenericCommand<MessageReceivedEvent> {
     private PrintStream out;
 
     public MessageLoggerCommand(PrintStream out) {
-        super(MessageReceivedEvent.class, CommandProperty.RESPECT_BOTS);
+        super(MessageReceivedEvent.class, LegacyCommandProperty.RESPECT_BOTS);
 
         this.displayName = "Logging";
         this.description = "Logs MessageReceivedEvent details to System.out";

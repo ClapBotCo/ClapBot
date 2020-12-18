@@ -2,9 +2,9 @@ package joecord.seal.clapbot.commands.memberJoin;
 
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 
-public class JoinMessageCommand extends GenericCommand<GuildMemberJoinEvent> {
+public class JoinMessageCommand extends LegacyGenericCommand<GuildMemberJoinEvent> {
 
     /** The channel ID to send join messages to */
     private String channelId;

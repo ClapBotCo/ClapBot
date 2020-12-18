@@ -1,16 +1,16 @@
-package joecord.seal.clapbot.api;
+package joecord.seal.clapbot.api.legacy;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-public enum CommandProperty {
+public enum LegacyCommandProperty {
 
     /**
      * Command is called by sending a message starting with the prefix and
      * then one of the command's aliases.
      * 
      * Invoked commands must call {@link 
-     * joecord.seal.clapbot.api.GenericCommand#setAliases 
+     * LegacyGenericCommand#setAliases
      * setAliases(HashSet<String>)} with their aliases at construction time.
      */
     INVOKED,
@@ -19,9 +19,9 @@ public enum CommandProperty {
      * Command has a condition that is checked before being executed.
      * 
      * Conditional commands must call {@link
-     * joecord.seal.clapbot.api.GenericCommand#setCondition 
+     * LegacyGenericCommand#setCondition
      * setCondition(Predicate)} with their condition predicate and {@link
-     * joecord.seal.clapbot.api.GenericCommand#setConditionDesc 
+     * LegacyGenericCommand#setConditionDesc
      * setConditionDesc(String)} with a description of the condition at 
      * construction time.
      */
@@ -30,21 +30,21 @@ public enum CommandProperty {
     /**
      * Command can only be invoked by certain users.
      * 
-     * Privelaged commands must call {@link
-     * joecord.seal.clapbot.api.GenericCommand#setPrivelage 
+     * Privileged commands must call {@link
+     * LegacyGenericCommand#setPrivilege
      * setPrivelage(Predicate)} with their privelage check predicate and {@link
-     * joecord.seal.clapbot.api.GenericCommand#setPrivelageDesc 
+     * LegacyGenericCommand#setPrivilegeDesc
      * setPrivelageDesc(String)} with a description if the check at
      * construction time.
      */
-    PRIVELAGED,
+    PRIVILEGED,
 
     /**
      * Command needs access to the {@link joecord.seal.clapbot.CommandHandler
      * Command Handler}.
      * 
      * Meta commands can call {@link 
-     * joecord.seal.clapbot.api.GenericCommand#getCommandHandler
+     * LegacyGenericCommand#getCommandHandler
      * getCommandHandler()} to get the Command Handler at any time.
      */
     META,
@@ -53,16 +53,16 @@ public enum CommandProperty {
      * Command needs access to arguments given in the invoking message.
      * 
      * Commands that use arguments must also be {@link 
-     * joecord.seal.clapbot.api.CommandProperty#INVOKED 
+     * LegacyCommandProperty#INVOKED
      * INVOKED} commands.
      * 
      * Uses-Arguments commands can call {@link 
-     * joecord.seal.clapbot.api.GenericCommand#getArguments
+     * LegacyGenericCommand#getArguments
      * getArguments()} to get their arguments at any time.
      * 
      * Uses-Arguments
      * commands must call {@link 
-     * joecord.seal.clapbot.api.GenericCommand#setArgumentsDesc
+     * LegacyGenericCommand#setArgumentsDesc
      * setArgumentsDesc(String)} with a description of the command's usage
      * syntax at construction time.
      */
@@ -89,16 +89,16 @@ public enum CommandProperty {
         return String.join("-", display);
     }
 
-    public static void assertLegality(CommandProperty... properties) {
+    public static void assertLegality(LegacyCommandProperty... properties) {
         assertLegality(Arrays.asList(properties));
     }
 
-    public static void assertLegality(Collection<CommandProperty> properties) {
-        for(CommandProperty prop : properties) {
+    public static void assertLegality(Collection<LegacyCommandProperty> properties) {
+        for(LegacyCommandProperty prop : properties) {
             switch(prop) {
                 case USES_ARGUMENTS: {
                     // Requires INVOKED
-                    if(!properties.contains(CommandProperty.INVOKED)) {
+                    if(!properties.contains(LegacyCommandProperty.INVOKED)) {
                         throw new IllegalArgumentException(
                             "Illegal CommandPropertys, cannot have " + 
                             "Uses-Arguments without Invoked");
@@ -111,7 +111,7 @@ public enum CommandProperty {
                     break;
                 case META:
                     break;
-                case PRIVELAGED:
+                case PRIVILEGED:
                     break;
                 case RESPECT_BOTS:
                     break;

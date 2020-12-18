@@ -1,13 +1,13 @@
 package joecord.seal.clapbot.commands.message;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class PingCommand extends GenericCommand<MessageReceivedEvent> {
+public class PingCommand extends LegacyGenericCommand<MessageReceivedEvent> {
     
     public PingCommand() {
-        super(MessageReceivedEvent.class, CommandProperty.INVOKED);
+        super(MessageReceivedEvent.class, LegacyCommandProperty.INVOKED);
 
         this.displayName = "Ping";
         this.description = "Gets the bot's response time in milliseconds";

@@ -3,13 +3,13 @@ package joecord.seal.clapbot.commands.conditional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.IMentionable;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-public class NerdDetectedCommand extends GenericCommand<MessageReceivedEvent> {
+public class NerdDetectedCommand extends LegacyGenericCommand<MessageReceivedEvent> {
 
     /** Triggers when the counter reaches this number */
     private static final int COUNTER_MAX = 4;
@@ -28,7 +28,7 @@ public class NerdDetectedCommand extends GenericCommand<MessageReceivedEvent> {
 
     public NerdDetectedCommand() {
         super(MessageReceivedEvent.class,
-            CommandProperty.CONDITIONAL, CommandProperty.PRIVELAGED);
+            LegacyCommandProperty.CONDITIONAL, LegacyCommandProperty.PRIVILEGED);
 
         this.displayName = "Nerd detected";
         this.description = String.format((
@@ -44,8 +44,8 @@ public class NerdDetectedCommand extends GenericCommand<MessageReceivedEvent> {
             "within the last %d minutes that has contained a nerd word",
             COUNTER_MAX, (TIMER_MILLISECONDS / 60000)));
         super.setCondition(event -> this.check(event));
-        super.setPrivelageDesc("Only triggers on Alec or Nick");
-        super.setPrivelage(event -> 
+        super.setPrivilegeDesc("Only triggers on Alec or Nick");
+        super.setPrivilege(event ->
             event.getAuthor().getIdLong() == 175851085456474113l ||
                 event.getAuthor().getIdLong() == 297978513250713602l);
     }

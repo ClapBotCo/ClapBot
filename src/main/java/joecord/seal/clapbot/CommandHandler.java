@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import joecord.seal.clapbot.api.CommandProperty;
-import joecord.seal.clapbot.api.GenericCommand;
+import joecord.seal.clapbot.api.legacy.LegacyCommandProperty;
+import joecord.seal.clapbot.api.legacy.LegacyGenericCommand;
 
 public class CommandHandler {
 
@@ -18,7 +18,7 @@ public class CommandHandler {
 
     /**
      * The string used before a command alias for all commands with the
-     * {@link joecord.seal.clapbot.api.CommandProperty#INVOKED invoked}
+     * {@link LegacyCommandProperty#INVOKED invoked}
      * property.
      */
     private String prefix;
@@ -50,7 +50,7 @@ public class CommandHandler {
      * @param command The command to register
      * @return True iff the command was not already registered
      */
-    public <T extends GenericEvent> boolean register(GenericCommand<T> command) {
+    public <T extends GenericEvent> boolean register(LegacyGenericCommand<T> command) {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(command.getEventClass());
 
@@ -69,7 +69,7 @@ public class CommandHandler {
      * @param command The command to deregister
      * @return True iff the command was previously registered
      */
-    public <T extends Event> boolean deregister(GenericCommand<T> command) {
+    public <T extends Event> boolean deregister(LegacyGenericCommand<T> command) {
         @SuppressWarnings("unchecked") // This cast should always work
         Entry<T> entry = (Entry<T>)register.get(command.getEventClass());
 
@@ -94,7 +94,7 @@ public class CommandHandler {
     /**
      * Contains the logic for running commands when a supported JDA event
      * occurs. Contains all logic for handling {@link
-     * joecord.seal.clapbot.api.CommandProperty CommandPropertys}.
+     * LegacyCommandProperty CommandPropertys}.
      * 
      * @param <T> Generic type of the event being handled
      * @param eventClass The {@link java.lang.Class} of the event
@@ -116,54 +116,54 @@ public class CommandHandler {
         }
 
         // Set of commands to iterate over
-        Set<GenericCommand<T>> cmdSet = entry.getAll();
+        Set<LegacyGenericCommand<T>> cmdSet = entry.getAll();
 
         // Handle CommandProperty.INVOKED
         if(message != null && message.trim().startsWith(this.prefix)) {
             
             String[] parts = message.substring(prefix.length()).split(" ");
-            GenericCommand<T> invokedCmd = entry.getInvoked(parts[0]);
+            LegacyGenericCommand<T> invokedCmd = entry.getInvoked(parts[0]);
 
             if(invokedCmd != null) {
                 // If we found a new command, add it to the set by making a copy
                 // of the set and adding it.
-                cmdSet = new HashSet<GenericCommand<T>>(cmdSet);
+                cmdSet = new HashSet<LegacyGenericCommand<T>>(cmdSet);
                 cmdSet.add(invokedCmd);
 
                 // Handle CommandProperty.USES_ARGUMENTS
-                if(invokedCmd.hasProperties(CommandProperty.USES_ARGUMENTS)) {
+                if(invokedCmd.hasProperties(LegacyCommandProperty.USES_ARGUMENTS)) {
                     invokedCmd.setArguments(
                         Arrays.copyOfRange(parts, 1, parts.length));
                 }
             }
         }
 
-        for(GenericCommand<T> cmd : cmdSet) {
+        for(LegacyGenericCommand<T> cmd : cmdSet) {
 
             // Beware, this code contains the evil continue statement! :O
 
             // Handle CommandProperty.RESPECT_BOTS
-            if(!cmd.hasProperties(CommandProperty.RESPECT_BOTS) && isBot) {
+            if(!cmd.hasProperties(LegacyCommandProperty.RESPECT_BOTS) && isBot) {
                 // Ignore this event for this command
                 continue;
             }
 
             // Handle CommandProperty.META
-            if(cmd.hasProperties(CommandProperty.META)) {
+            if(cmd.hasProperties(LegacyCommandProperty.META)) {
                 // Give the command the command handler that it needs
                 cmd.setCommandHandler(this);
             }
 
             // Handle CommandProperty.PRIVELAGED
-            if(cmd.hasProperties(CommandProperty.PRIVELAGED)) {
-                if(!cmd.checkPrivelage(event)) {
+            if(cmd.hasProperties(LegacyCommandProperty.PRIVILEGED)) {
+                if(!cmd.checkPrivilege(event)) {
                     // If privelage check fails
                     continue;
                 }
             }
 
             // Handle CommandProperty.CONDITIONAL
-            if(cmd.hasProperties(CommandProperty.CONDITIONAL)) {
+            if(cmd.hasProperties(LegacyCommandProperty.CONDITIONAL)) {
                 if(!cmd.checkCondition(event)) {
                     // If condition check fails
                     continue;
@@ -209,8 +209,8 @@ public class CommandHandler {
      * @param <E> Generic type of the GenericEvent subclass for this entry
      */
     public class Entry<E extends GenericEvent> {
-        private HashSet<GenericCommand<E>> commands;
-        private HashMap<String, GenericCommand<E>> invoked;
+        private HashSet<LegacyGenericCommand<E>> commands;
+        private HashMap<String, LegacyGenericCommand<E>> invoked;
 
         /**
          * Construct a new Entry by initialising fields.
@@ -229,9 +229,9 @@ public class CommandHandler {
          * @param command GenericCommand to add
          * @return True iff te command was not already registered
          */
-        public boolean add(GenericCommand<E> command) {
+        public boolean add(LegacyGenericCommand<E> command) {
             boolean success = true;
-            if(command.hasProperties(CommandProperty.INVOKED)) {
+            if(command.hasProperties(LegacyCommandProperty.INVOKED)) {
                 for(String alias : command.getAliases()) {
                     if(success) {
                         success = invoked.put(alias, command) == null;
@@ -254,9 +254,9 @@ public class CommandHandler {
          * @param command GenericCommand to remove
          * @return True iff the command previously registered
          */
-        public boolean remove(GenericCommand<E> command) {
+        public boolean remove(LegacyGenericCommand<E> command) {
             boolean success = true;
-            if(command.hasProperties(CommandProperty.INVOKED)) {
+            if(command.hasProperties(LegacyCommandProperty.INVOKED)) {
                 for(String alias : command.getAliases()) {
                     if(success) {
                         success = invoked.remove(alias) == null;
@@ -279,7 +279,7 @@ public class CommandHandler {
          * @param alias The alias to check
          * @return The (possibly null) command
          */
-        public GenericCommand<E> getInvoked(String alias) {
+        public LegacyGenericCommand<E> getInvoked(String alias) {
             return invoked.get(alias);
         }
 
@@ -287,7 +287,7 @@ public class CommandHandler {
          * Gets all registered non-invoked commands.
          * @return Set of commands
          */
-        public Set<GenericCommand<E>> getAll() {
+        public Set<LegacyGenericCommand<E>> getAll() {
             return this.commands;
         }
 
