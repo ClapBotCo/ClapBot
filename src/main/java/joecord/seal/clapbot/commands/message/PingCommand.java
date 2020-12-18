@@ -19,7 +19,7 @@ public class PingCommand extends GenericCommand<MessageReceivedEvent> {
     public void execute(MessageReceivedEvent event) {
         long initialTime = System.currentTimeMillis();
 
-        event.getChannel().sendMessage("⏱")
+        event.getChannel().sendMessage("Ping...")
             .queue(response ->
                 response.editMessageFormat(
                     "Pong! %d ms", System.currentTimeMillis() - initialTime)

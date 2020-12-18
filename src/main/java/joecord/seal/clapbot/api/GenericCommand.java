@@ -10,11 +10,12 @@ import java.util.function.Predicate;
 
 import joecord.seal.clapbot.CommandHandler;
 import net.dv8tion.jda.api.events.GenericEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used to create a command
  */
-public abstract class GenericCommand<E extends GenericEvent> {
+public abstract class GenericCommand<@NotNull E extends GenericEvent> {
 
     /* Fields --------------------------------------------------------------- */
 
